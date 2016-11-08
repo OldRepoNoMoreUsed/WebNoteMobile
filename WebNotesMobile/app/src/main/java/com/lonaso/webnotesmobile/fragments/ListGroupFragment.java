@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.lonaso.webnotesmobile.R;
+import com.lonaso.webnotesmobile.adapters.GroupAdapter;
 
 
 public class ListGroupFragment extends Fragment {

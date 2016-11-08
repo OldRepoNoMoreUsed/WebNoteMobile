@@ -12,7 +12,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+
 import com.lonaso.webnotesmobile.fragments.ListGroupFragment;
+import com.lonaso.webnotesmobile.NotePackage.ListeNote;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -85,6 +87,7 @@ public class MainActivity extends AppCompatActivity
         //initializing the fragment object which is selected
         switch (itemId) {
             case R.id.nav_note:
+                fragment = new ListeNote();
                 break;
             case R.id.nav_groupe:
                 fragment = new ListGroupFragment();
