@@ -3,9 +3,13 @@ package com.lonaso.webnotesmobile.NotePackage;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.lonaso.webnotesmobile.R;
 
@@ -14,6 +18,8 @@ import com.lonaso.webnotesmobile.R;
  */
 
 public class ListeNote extends Fragment{
+    private Button addNewNotebtn = null;
+    private NoteView noteView = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -30,6 +36,20 @@ public class ListeNote extends Fragment{
         super.onViewCreated(view, savedInstanceState);
         //you can set the title for your toolbar here for different fragments different titles
         getActivity().setTitle("Liste des notes");
+        addNewNotebtn = (Button) getActivity().findViewById(R.id.NewNote);
+        addNewNotebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "Vous avez cree une nouvelle note", Toast.LENGTH_LONG).show();
+                loadNewNoteView();
+
+            }
+        });
     }
 
+    private void loadNewNoteView(){
+        noteView = new NoteView();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.content_frame, noteView).commit();
+    }
 }
