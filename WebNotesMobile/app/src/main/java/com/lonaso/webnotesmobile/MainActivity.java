@@ -12,10 +12,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.lonaso.webnotesmobile.fragments.ListGroupFragment;
+import com.lonaso.webnotesmobile.groups.ListGroupFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private String m_currentFragmentTag; //save the current tag button to redisplay after a orientation change
+    private static final String CURRENT_FRAGMENT_TAG = "currentFragmentTag"; //used for the bundle key
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,9 +100,9 @@ public class MainActivity extends AppCompatActivity
         if (fragment != null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, fragment);
+            m_currentFragmentTag = fragment.getTag();
             ft.commit();
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
     }
