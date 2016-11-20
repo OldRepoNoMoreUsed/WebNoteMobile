@@ -13,12 +13,22 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.lonaso.webnotesmobile.groups.ListGroupFragment;
+import com.lonaso.webnotesmobile.NotePackage.ListeNote;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private String m_currentFragmentTag; //save the current tag button to redisplay after a orientation change
     private static final String CURRENT_FRAGMENT_TAG = "currentFragmentTag"; //used for the bundle key
+    protected OnBackPressedListener onBackPressedListener;
+
+    public interface OnBackPressedListener{
+        void doBack();
+    }
+
+    public void setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
+        this.onBackPressedListener = onBackPressedListener;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +54,11 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        }
+        if(onBackPressedListener != null){
+            onBackPressedListener.doBack();
+        }
+        else {
             super.onBackPressed();
         }
     }
@@ -88,6 +102,7 @@ public class MainActivity extends AppCompatActivity
         //initializing the fragment object which is selected
         switch (itemId) {
             case R.id.nav_note:
+                fragment = new ListeNote();
                 break;
             case R.id.nav_groupe:
                 fragment = new ListGroupFragment();
@@ -105,5 +120,11 @@ public class MainActivity extends AppCompatActivity
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+    }
+
+    @Override
+    protected void onDestroy() {
+        onBackPressedListener = null;
+        super.onDestroy();
     }
 }
