@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.lonaso.webnotesmobile.ConnectionPackage.ConnectionFragment;
 import com.lonaso.webnotesmobile.groups.ListGroupFragment;
 import com.lonaso.webnotesmobile.NotePackage.ListeNote;
 
@@ -108,6 +109,9 @@ public class MainActivity extends AppCompatActivity
                 fragment = new ListGroupFragment();
                 break;
             case R.id.nav_compte:
+                break;
+            case R.id.nav_connection:
+                fragment = new ConnectionFragment();
                 break;
         }
 
