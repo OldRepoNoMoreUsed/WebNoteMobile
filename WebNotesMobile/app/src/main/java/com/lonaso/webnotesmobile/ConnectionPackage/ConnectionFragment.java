@@ -21,7 +21,7 @@ import com.lonaso.webnotesmobile.groups.ListGroupFragment;
 public class ConnectionFragment extends Fragment{
 
     public static final String TAG = "ConnectionFragment";
-    private ImageView appLogo;
+    //private ImageView appLogo;
     private Button createAccount;
     private EditText userEmail;
     private EditText userPassword;
