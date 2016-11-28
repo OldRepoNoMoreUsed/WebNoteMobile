@@ -30,13 +30,13 @@ public class UserAdapter extends BaseAdapter implements Filterable {
     }
 
     private void construct() {
-        filteredUsers = UserStore.USERS;
+        filteredUsers = UserStore.USERS1;
 
         userFilter = new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 if(constraint == null) {
-                    filteredUsers = UserStore.USERS;
+                    filteredUsers = UserStore.USERS1;
                 } else {
                     filteredUsers = new ArrayList<>();
                     for(User user : UserStore.USERS) {

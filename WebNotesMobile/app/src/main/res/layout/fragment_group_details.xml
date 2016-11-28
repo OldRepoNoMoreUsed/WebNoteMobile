@@ -10,6 +10,13 @@
         android:id="@+id/groupDetailsFragment"
     android:paddingLeft="10dp">
 
+    <ImageView
+        android:layout_width="100dp"
+        app:srcCompat="@drawable/ic_menu_group"
+        android:id="@+id/imageView2"
+        android:layout_height="100dp"
+        android:layout_gravity="center" />
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -27,8 +34,8 @@
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="378dp"
-        android:id="@+id/userListView"/>
+        android:id="@+id/userListView"
+        android:layout_height="287dp" />
 
     <Button
         android:text="Enregister"

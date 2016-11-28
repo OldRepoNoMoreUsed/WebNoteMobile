@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -35,6 +36,7 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_group_details, container, false);
     }
 
@@ -42,6 +44,10 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        getActivity().setTitle("Détails du groupe");
+//        getActivity()/
+
+        ((MainActivity)getActivity()).setOnBackPressedListener(this);
         retrieveViews(getView());
         setUpViews(getActivity());
     }
@@ -62,13 +68,12 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
                         .setMessage("Etes-vous certain de vouloir supprimer ce membre du groupe ?")
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                
                                 Toast.makeText(getContext(), "Suppression...", Toast.LENGTH_SHORT).show();
                             }
                         })
                         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                               //
+
                             }
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
@@ -78,7 +83,7 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
         });
 
         userSearchView.setSubmitButtonEnabled(true);
-        userSearchView.setQueryHint("Nom du groupe ...");
+        userSearchView.setQueryHint("Nom d'utilisateur ...");
 
         userSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -114,8 +119,7 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
                 .setMessage("Etes vous sur de ne pas vouloir sauvegarder ?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        // continue with delete
-                        onDestroy();
+//                        getFragmentManager().popBackStack();
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

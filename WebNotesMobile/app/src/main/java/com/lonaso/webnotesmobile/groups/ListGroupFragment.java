@@ -50,6 +50,7 @@ public class ListGroupFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        getActivity().setTitle("Liste des groupes");
         retrieveViews(getView());
         setUpViews(getActivity());
     }
@@ -116,6 +117,7 @@ public class ListGroupFragment extends Fragment {
                 if (fragment != null) {
                     FragmentTransaction ft = getFragmentManager().beginTransaction();
                     ft.replace(R.id.content_frame, fragment);
+                    ft.addToBackStack(null);
                     ft.commit();
 
                 }
