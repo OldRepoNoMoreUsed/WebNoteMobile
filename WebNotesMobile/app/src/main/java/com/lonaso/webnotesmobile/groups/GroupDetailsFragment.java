@@ -1,21 +1,26 @@
 package com.lonaso.webnotesmobile.groups;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
+import com.lonaso.webnotesmobile.MainActivity;
 import com.lonaso.webnotesmobile.R;
 import com.lonaso.webnotesmobile.users.UserAdapter;
 
-public class GroupDetailsFragment extends Fragment {
+public class GroupDetailsFragment extends Fragment implements MainActivity.OnBackPressedListener{
 
     public static final String TAG = "GroupDetailsFragment";
     private ListView userListView;
@@ -49,26 +54,28 @@ public class GroupDetailsFragment extends Fragment {
     private void setUpViews(final Activity activity) {
         userAdapter = new UserAdapter(activity);
         userListView.setAdapter(userAdapter);
-//        userListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Group group = (Group) groupListView.getItemAtPosition(position);
-//
-//                GroupDetailsFragment groupDetailsFragment = (GroupDetailsFragment) getFragmentManager().findFragmentById(R.id.groupDetailsFragment);
-//
-//                if(groupDetailsFragment != null && groupDetailsFragment.isInLayout()) {
-//                    //groupDetailsFragment.updateDetails(group);
-//                } else {
-//                    Fragment fragment = new GroupDetailsFragment();
-//                    //replacing the fragment
-//                    if (fragment != null) {
-//                        FragmentTransaction ft = getFragmentManager().beginTransaction();
-//                        ft.replace(R.id.content_frame, fragment);
-//                        ft.commit();
-//                    }
-//                }
-//            }
-//        });
+        userListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Supression d'un membre")
+                        .setMessage("Etes-vous certain de vouloir supprimer ce membre du groupe ?")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                
+                                Toast.makeText(getContext(), "Suppression...", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                               //
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+                return true;
+            }
+        });
 
         userSearchView.setSubmitButtonEnabled(true);
         userSearchView.setQueryHint("Nom du groupe ...");
@@ -98,5 +105,31 @@ public class GroupDetailsFragment extends Fragment {
     public void onResume() {
         userAdapter.notifyDataSetChanged();
         super.onResume();
+    }
+
+    @Override
+    public void doBack() {
+        new AlertDialog.Builder(getContext())
+                .setTitle("Vous allez quitter la note")
+                .setMessage("Etes vous sur de ne pas vouloir sauvegarder ?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // continue with delete
+                        onDestroy();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                        Toast.makeText(getContext(), "Vous n'avez pas quitté l'application", Toast.LENGTH_LONG).show();
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+    @Override
+    public void onDestroy(){
+        Toast.makeText(getContext(), "Destroy", Toast.LENGTH_LONG).show();
+        super.onDestroy();
     }
 }

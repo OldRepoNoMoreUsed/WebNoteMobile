@@ -1,48 +1,40 @@
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         tools:context="com.lonaso.webnotesmobile.groups.GroupDetailsFragment"
-        android:id="@+id/groupDetailsFragment">
+        android:id="@+id/groupDetailsFragment"
+    android:paddingLeft="10dp">
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <EditText
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Nom du groupe"
+        android:ems="10"
+        android:id="@+id/groupNameText" />
 
-        <Space
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_width="10dp" />
+    <SearchView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/userSearch">
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+    </SearchView>
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:text="Nom du groupe"
-                android:ems="10"
-                android:id="@+id/groupNameText" />
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="378dp"
+        android:id="@+id/userListView"/>
 
-            <SearchView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/userSearch">
+    <Button
+        android:text="Enregister"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/saveGroupButton" />
 
-            </SearchView>
 
-            <ListView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/userListView" />
-
-        </LinearLayout>
-    </LinearLayout>
-
-</android.support.design.widget.CoordinatorLayout>
+</LinearLayout>
