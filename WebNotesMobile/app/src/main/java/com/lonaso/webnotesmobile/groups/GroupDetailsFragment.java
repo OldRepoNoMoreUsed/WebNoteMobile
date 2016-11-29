@@ -2,21 +2,24 @@ package com.lonaso.webnotesmobile.groups;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.lonaso.webnotesmobile.ImagePicker;
 import com.lonaso.webnotesmobile.MainActivity;
 import com.lonaso.webnotesmobile.R;
 import com.lonaso.webnotesmobile.users.UserAdapter;
@@ -27,6 +30,26 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
     private ListView userListView;
     private SearchView userSearchView;
     private UserAdapter userAdapter;
+    private Button saveGroupButton;
+    private static final int PICK_IMAGE_ID = 234;
+
+    public void onPickImage(View view) {
+        Intent chooseImageIntent = ImagePicker.getPickImageIntent(getActivity());
+        startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch(requestCode) {
+            case PICK_IMAGE_ID:
+                Bitmap bitmap = ImagePicker.getImageFromResult(getActivity(), resultCode, data);
+                // TODO use bitmap
+                break;
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
+                break;
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,6 +78,7 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
     private void retrieveViews(View view) {
         userListView = (ListView) view.findViewById(R.id.userListView);
         userSearchView = (SearchView) view.findViewById(R.id.userSearch);
+        saveGroupButton = (Button) view.findViewById(R.id.saveGroupButton);
     }
 
     private void setUpViews(final Activity activity) {
@@ -102,6 +126,13 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
                 }
 
                 return true;
+            }
+        });
+
+        saveGroupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onPickImage(view);
             }
         });
     }
