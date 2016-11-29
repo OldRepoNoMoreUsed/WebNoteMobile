@@ -5,7 +5,7 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
-    tools:context="com.lonaso.webnotesmobile.groups.GroupDetailsFragment"
+    tools:context="com.lonaso.webnotesmobile.ConnectionPackage.ConnectionFragment"
     android:id="@+id/connectionFragment">
 
     <!--<ImageView
