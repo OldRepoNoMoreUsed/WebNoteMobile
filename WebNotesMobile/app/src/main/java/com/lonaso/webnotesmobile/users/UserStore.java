@@ -6,10 +6,14 @@ import java.util.List;
 public class UserStore {
 
     public static final List<User> USERS = new ArrayList<>();
+    public static final List<User> USERS1 = new ArrayList<>();
 
     static {
         for(int i = 0; i < 20; i++) {
             USERS.add(new User(i, "User name " + i, "user" + i + "@example.com", "password" + i, "avatar" + 1 + ".png"));
+        }
+        for(int i = 10; i < 20; i++) {
+            USERS1.add(new User(i, "User name " + i, "user" + i + "@example.com", "password" + i, "avatar" + 1 + ".png"));
         }
     }
 

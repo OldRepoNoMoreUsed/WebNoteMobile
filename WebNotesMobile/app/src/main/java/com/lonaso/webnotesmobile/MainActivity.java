@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.lonaso.webnotesmobile.ConnectionPackage.ConnectionFragment;
 import com.lonaso.webnotesmobile.groups.ListGroupFragment;
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        displaySelectedScreen(R.id.nav_groupe);
+        displaySelectedScreen(R.id.nav_connection);
     }
 
     @Override
@@ -80,6 +81,7 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Toast.makeText(this, "Suppression...", Toast.LENGTH_SHORT).show();
             return true;
         }
 
@@ -120,6 +122,7 @@ public class MainActivity extends AppCompatActivity
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, fragment);
             m_currentFragmentTag = fragment.getTag();
+            ft.addToBackStack(null);
             ft.commit();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

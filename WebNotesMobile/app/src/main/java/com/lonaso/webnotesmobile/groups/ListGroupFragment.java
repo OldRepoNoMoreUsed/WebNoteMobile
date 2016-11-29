@@ -3,7 +3,6 @@ package com.lonaso.webnotesmobile.groups;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
@@ -11,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -21,7 +21,7 @@ import com.lonaso.webnotesmobile.R;
 public class ListGroupFragment extends Fragment {
 
     public static final String TAG = "ListGroupFragment";
-    private FloatingActionButton newGroupButton;
+    private Button newGroupButton;
     private ListView groupListView;
     private SearchView groupSearchView;
     private GroupAdapter groupAdapter;
@@ -50,12 +50,13 @@ public class ListGroupFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        getActivity().setTitle("Liste des groupes");
         retrieveViews(getView());
         setUpViews(getActivity());
     }
 
     private void retrieveViews(View view) {
-        newGroupButton = (FloatingActionButton) view.findViewById(R.id.newGroupButton);
+        newGroupButton = (Button) view.findViewById(R.id.newGroupButton);
         groupListView = (ListView) view.findViewById(R.id.groupListView);
         groupSearchView = (SearchView) view.findViewById(R.id.groupSearch);
 
@@ -116,7 +117,9 @@ public class ListGroupFragment extends Fragment {
                 if (fragment != null) {
                     FragmentTransaction ft = getFragmentManager().beginTransaction();
                     ft.replace(R.id.content_frame, fragment);
+                    ft.addToBackStack(null);
                     ft.commit();
+
                 }
             }
         });

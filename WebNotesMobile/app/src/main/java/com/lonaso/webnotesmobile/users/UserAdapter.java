@@ -30,13 +30,13 @@ public class UserAdapter extends BaseAdapter implements Filterable {
     }
 
     private void construct() {
-        filteredUsers = UserStore.USERS;
+        filteredUsers = UserStore.USERS1;
 
         userFilter = new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 if(constraint == null) {
-                    filteredUsers = UserStore.USERS;
+                    filteredUsers = UserStore.USERS1;
                 } else {
                     filteredUsers = new ArrayList<>();
                     for(User user : UserStore.USERS) {
@@ -83,7 +83,7 @@ public class UserAdapter extends BaseAdapter implements Filterable {
 
             holder = new UserHolder();
 
-            holder.nameSwitch = (Switch) convertView.findViewById(R.id.userNameSwitch);
+            holder.name = (TextView) convertView.findViewById(R.id.userName);
 
             convertView.setTag(holder);
         } else {
@@ -92,7 +92,7 @@ public class UserAdapter extends BaseAdapter implements Filterable {
 
         User user = filteredUsers.get(position);
 
-        holder.nameSwitch.setText(user.getName());
+        holder.name.setText(user.getName());
 
         return convertView;
     }
@@ -106,6 +106,6 @@ public class UserAdapter extends BaseAdapter implements Filterable {
      *  Wrapper class for our user views
      */
     private static class UserHolder {
-        Switch nameSwitch;
+        TextView name;
     }
 }
