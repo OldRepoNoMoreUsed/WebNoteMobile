@@ -2,6 +2,13 @@ package com.lonaso.webnotesmobile.groups;
 
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.lonaso.webnotesmobile.users.User;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *  Class representing groups in this application
  *
@@ -76,6 +83,15 @@ public class Group {
         this.icon = icon;
     }
 
+    /**
+     *  The list of user of this group
+     */
+    private ArrayList<User> users;
+
+    public ArrayList<User> getUsers() { return users; }
+
+    public void setUsers(ArrayList<User> users) { this.users = users; }
+
     /*--------------------------------------------------------------------------------------------*\
      *  OBJECT METHOD OVERRIDES
     \*--------------------------------------------------------------------------------------------*/
@@ -99,5 +115,19 @@ public class Group {
         result = 31 * result + (getName() == null ? 0 : getName().hashCode());
 
         return result;
+    }
+
+    /*--------------------------------------------------------------------------------------------*\
+     *  OBJECT METHOD OVERRIDES
+    \*--------------------------------------------------------------------------------------------*/
+    /**
+     *
+     * @param response
+     * @return
+     */
+    public static Group parseJSON(String response) {
+        Gson gson = new GsonBuilder().create();
+        Group group = gson.fromJson(response, Group.class);
+        return group;
     }
 }
