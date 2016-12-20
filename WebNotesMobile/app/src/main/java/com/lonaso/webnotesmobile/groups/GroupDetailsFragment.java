@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Filter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -31,25 +32,9 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
     private SearchView userSearchView;
     private UserAdapter userAdapter;
     private Button saveGroupButton;
+    private ImageView groupImageView;
     private static final int PICK_IMAGE_ID = 234;
 
-    public void onPickImage(View view) {
-        Intent chooseImageIntent = ImagePicker.getPickImageIntent(getActivity());
-        startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch(requestCode) {
-            case PICK_IMAGE_ID:
-                Bitmap bitmap = ImagePicker.getImageFromResult(getActivity(), resultCode, data);
-                // TODO use bitmap
-                break;
-            default:
-                super.onActivityResult(requestCode, resultCode, data);
-                break;
-        }
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,6 +64,7 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
         userListView = (ListView) view.findViewById(R.id.userListView);
         userSearchView = (SearchView) view.findViewById(R.id.userSearch);
         saveGroupButton = (Button) view.findViewById(R.id.saveGroupButton);
+        groupImageView = (ImageView) view.findViewById(R.id.groupImageView);
     }
 
     private void setUpViews(final Activity activity) {
@@ -129,12 +115,32 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
             }
         });
 
-        saveGroupButton.setOnClickListener(new View.OnClickListener() {
+        groupImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onPickImage(view);
             }
         });
+    }
+
+    public void onPickImage(View view) {
+        Intent chooseImageIntent = ImagePicker.getPickImageIntent(getActivity());
+        startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data != null)
+        {
+            switch(requestCode) {
+                case PICK_IMAGE_ID:
+                    Bitmap photo = (Bitmap) data.getExtras().get("data");
+                    groupImageView.setImageBitmap(photo);
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     @Override
@@ -146,11 +152,12 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
     @Override
     public void doBack() {
         new AlertDialog.Builder(getContext())
-                .setTitle("Vous allez quitter la note")
+                .setTitle("Quitter la page de détails")
                 .setMessage("Etes vous sur de ne pas vouloir sauvegarder ?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-//                        getFragmentManager().popBackStack();
+                        getFragmentManager().popBackStack();
+//                        onDestroy();
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

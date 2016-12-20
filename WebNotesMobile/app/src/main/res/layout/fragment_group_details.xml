@@ -13,7 +13,8 @@
     <ImageView
         android:layout_width="100dp"
         app:srcCompat="@drawable/ic_menu_group"
-        android:id="@+id/imageView2"
+        android:background="@android:color/darker_gray"
+        android:id="@+id/groupImageView"
         android:layout_height="100dp"
         android:layout_gravity="center" />
 
