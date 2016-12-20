@@ -1,11 +1,21 @@
 package com.lonaso.webnotesmobile.groups;
 
+import com.lonaso.webnotesmobile.IWebNoteAPI;
+import com.lonaso.webnotesmobile.MainActivity;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class GroupStore {
 
     public static final List<Group> GROUPS = new ArrayList<>();
+    private static List groups;
 
     static {
         for(int i = 0; i < 10; i++) {
@@ -35,5 +45,30 @@ public class GroupStore {
         }
 
         return result;
+    }
+
+    public static List<Group> getGroupsFromAPI() {
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(MainActivity.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        IWebNoteAPI webNoteAPI = retrofit.create(IWebNoteAPI.class);
+        Call<List<Group>> call = webNoteAPI.getGroupList();
+        call.enqueue(new Callback<List<Group>>() {
+            @Override
+            public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
+                int statusCode = response.code();
+                groups.addAll(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<List<Group>> call, Throwable t) {
+                System.err.println("API ERROR");
+            }
+        });
+
+        return groups;
     }
 }

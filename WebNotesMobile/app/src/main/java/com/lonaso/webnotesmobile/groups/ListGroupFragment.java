@@ -43,7 +43,7 @@ public class ListGroupFragment extends Fragment implements MainActivity.OnBackPr
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        ((MainActivity)getActivity()).setOnBackPressedListener(this);
+        ((MainActivity) getActivity()).setOnBackPressedListener(this);
         getActivity().setTitle("Liste des groupes");
         retrieveViews(getView());
         setUpViews(getActivity());
@@ -66,7 +66,7 @@ public class ListGroupFragment extends Fragment implements MainActivity.OnBackPr
 
                 GroupDetailsFragment groupDetailsFragment = (GroupDetailsFragment) getFragmentManager().findFragmentById(R.id.groupDetailsFragment);
 
-                if(groupDetailsFragment != null && groupDetailsFragment.isInLayout()) {
+                if (groupDetailsFragment != null && groupDetailsFragment.isInLayout()) {
                     //groupDetailsFragment.updateDetails(group);
                 } else {
                     Fragment fragment = new GroupDetailsFragment();
@@ -94,7 +94,7 @@ public class ListGroupFragment extends Fragment implements MainActivity.OnBackPr
             public boolean onQueryTextChange(String newText) {
                 Filter filter = groupAdapter.getFilter();
 
-                if(TextUtils.isEmpty(newText)) {
+                if (TextUtils.isEmpty(newText)) {
                     filter.filter(null);
                 } else {
                     filter.filter(newText);

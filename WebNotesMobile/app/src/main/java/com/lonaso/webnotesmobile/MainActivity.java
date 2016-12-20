@@ -19,11 +19,15 @@ import com.lonaso.webnotesmobile.groups.ListGroupFragment;
 import com.lonaso.webnotesmobile.NotePackage.ListeNote;
 import com.lonaso.webnotesmobile.users.UserAccountFragment;
 
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private String m_currentFragmentTag; //save the current tag button to redisplay after a orientation change
     private static final String CURRENT_FRAGMENT_TAG = "currentFragmentTag"; //used for the bundle key
+    public static final String BASE_URL = "http://localhost/api/";
     protected OnBackPressedListener onBackPressedListener;
 
     private NoteStore noteStore = new NoteStore();

@@ -31,16 +31,16 @@ public class GroupAdapter extends BaseAdapter implements Filterable {
     }
 
     private void construct() {
-        filteredGroups = GroupStore.GROUPS;
+        filteredGroups = GroupStore.getGroupsFromAPI();
 
         groupFilter = new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 if(constraint == null) {
-                    filteredGroups = GroupStore.GROUPS;
+                    filteredGroups = GroupStore.getGroupsFromAPI();
                 } else {
                     filteredGroups = new ArrayList<>();
-                    for(Group group : GroupStore.GROUPS) {
+                    for(Group group : GroupStore.getGroupsFromAPI()) {
                         if(group.getName().toLowerCase().contains(constraint.toString().toLowerCase())) {
                             filteredGroups.add(group);
                         }
