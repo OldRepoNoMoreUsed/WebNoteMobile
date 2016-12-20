@@ -44,6 +44,7 @@ public class ConnectionFragment extends Fragment{
 
         retrieveViews(getView());
         setUpViews(getActivity());
+        getActivity().setTitle("Connexion");
     }
 
     private void retrieveViews(View view) {

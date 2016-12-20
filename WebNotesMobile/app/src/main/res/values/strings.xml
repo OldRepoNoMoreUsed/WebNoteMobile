@@ -14,4 +14,6 @@
     <string name="password">Mot de passe</string>
     <string name="pseudo">Pseudo</string>
     <string name="connect">Se connecter</string>
+    <string name="modify">Modifier</string>
+    <string name="pick_image_intent_text">Image</string>
 </resources>

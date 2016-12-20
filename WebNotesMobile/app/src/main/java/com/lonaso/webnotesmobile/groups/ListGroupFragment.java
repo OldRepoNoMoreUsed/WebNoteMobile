@@ -15,10 +15,11 @@ import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.SearchView;
 
+import com.lonaso.webnotesmobile.MainActivity;
 import com.lonaso.webnotesmobile.R;
 
 
-public class ListGroupFragment extends Fragment {
+public class ListGroupFragment extends Fragment implements MainActivity.OnBackPressedListener {
 
     public static final String TAG = "ListGroupFragment";
     private Button newGroupButton;
@@ -38,18 +39,11 @@ public class ListGroupFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_list_group, container, false);
     }
 
-//    @Override
-//    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-//        super.onViewCreated(view, savedInstanceState);
-//        //you can set the title for your toolbar here for different fragments different titles
-//        getActivity().setTitle("Groupes");
-//    }
-
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        ((MainActivity)getActivity()).setOnBackPressedListener(this);
         getActivity().setTitle("Liste des groupes");
         retrieveViews(getView());
         setUpViews(getActivity());
@@ -80,6 +74,7 @@ public class ListGroupFragment extends Fragment {
                     if (fragment != null) {
                         FragmentTransaction ft = getFragmentManager().beginTransaction();
                         ft.replace(R.id.content_frame, fragment);
+                        ft.addToBackStack(null);
                         ft.commit();
                     }
                 }
@@ -123,6 +118,11 @@ public class ListGroupFragment extends Fragment {
                 }
             }
         });
+    }
+
+    @Override
+    public void doBack() {
+        super.onDestroy();
     }
 
     @Override
