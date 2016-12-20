@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.lonaso.webnotesmobile.ConnectionPackage.ConnectionFragment;
 import com.lonaso.webnotesmobile.groups.ListGroupFragment;
 import com.lonaso.webnotesmobile.NotePackage.ListeNote;
+import com.lonaso.webnotesmobile.users.UserAccountFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -111,6 +112,7 @@ public class MainActivity extends AppCompatActivity
                 fragment = new ListGroupFragment();
                 break;
             case R.id.nav_compte:
+                fragment = new UserAccountFragment();
                 break;
             case R.id.nav_connection:
                 fragment = new ConnectionFragment();
