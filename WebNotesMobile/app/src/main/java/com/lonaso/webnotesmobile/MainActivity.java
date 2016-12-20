@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.lonaso.webnotesmobile.ConnectionPackage.ConnectionFragment;
+import com.lonaso.webnotesmobile.NotePackage.NoteStore;
 import com.lonaso.webnotesmobile.groups.ListGroupFragment;
 import com.lonaso.webnotesmobile.NotePackage.ListeNote;
 
@@ -23,6 +24,12 @@ public class MainActivity extends AppCompatActivity
     private String m_currentFragmentTag; //save the current tag button to redisplay after a orientation change
     private static final String CURRENT_FRAGMENT_TAG = "currentFragmentTag"; //used for the bundle key
     protected OnBackPressedListener onBackPressedListener;
+
+    private NoteStore noteStore = new NoteStore();
+
+    public NoteStore getNoteStore(){
+        return noteStore;
+    }
 
     public interface OnBackPressedListener{
         void doBack();
@@ -122,7 +129,6 @@ public class MainActivity extends AppCompatActivity
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, fragment);
             m_currentFragmentTag = fragment.getTag();
-            ft.addToBackStack(null);
             ft.commit();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
