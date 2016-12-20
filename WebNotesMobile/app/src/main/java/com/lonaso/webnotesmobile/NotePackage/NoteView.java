@@ -14,7 +14,9 @@ import android.view.ViewGroup;
 import com.lonaso.webnotesmobile.MainActivity;
 import com.lonaso.webnotesmobile.R;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.Toast;
 
 /**
@@ -24,6 +26,8 @@ import android.widget.Toast;
 public class NoteView extends Fragment implements MainActivity.OnBackPressedListener{
     protected Button saveBtn;
     protected ListeNote liste;
+    protected Note note;
+    protected NoteStore noteStore;
 
 
     @Override
@@ -41,13 +45,16 @@ public class NoteView extends Fragment implements MainActivity.OnBackPressedList
         super.onViewCreated(view, savedInstanceState);
         ((MainActivity)getActivity()).setOnBackPressedListener(this);
 
-        getActivity().setTitle("Note View");
+        noteStore = ((MainActivity)getActivity()).getNoteStore();
+
+        getActivity().setTitle("Edition des notes");
 
         saveBtn = (Button) getActivity().findViewById(R.id.Save);
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getContext(), "Note enregistre", Toast.LENGTH_LONG).show();
+                saveNote();
                 loadListNote();
 
             }
@@ -79,11 +86,20 @@ public class NoteView extends Fragment implements MainActivity.OnBackPressedList
     public void onDestroy(){
         Toast.makeText(getContext(), "Destroy", Toast.LENGTH_LONG).show();
         super.onDestroy();
+        loadListNote();
     }
 
     private void loadListNote() {
         liste = new ListeNote();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.content_frame, liste).commit();
+    }
+
+    private void saveNote(){
+        EditText title = (EditText) getActivity().findViewById(R.id.Title);
+        EditText description = (EditText) getActivity().findViewById(R.id.Description);
+        MultiAutoCompleteTextView content = (MultiAutoCompleteTextView) getActivity().findViewById(R.id.Content);
+
+        note = new Note(title.getText().toString(), description.getText().toString(), content.getText().toString());
     }
 }
