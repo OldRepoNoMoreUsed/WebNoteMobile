@@ -9,6 +9,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 public interface IWebNoteAPI {
+    String ENDPOINT = "http://157.26.108.189/api/";
 
     @GET("group/")
     Call<List<Group>> getGroupList();

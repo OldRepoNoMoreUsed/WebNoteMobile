@@ -14,13 +14,34 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class GroupStore {
 
-    public static final List<Group> GROUPS = new ArrayList<>();
+    public static List<Group> GROUPS = new ArrayList<>();
     private static List groups;
 
     static {
-        for(int i = 0; i < 10; i++) {
-            GROUPS.add(new Group(i, "Group name " + i, "Description " + i, "icon" + 1 + ".png"));
-        }
+//        for(int i = 0; i < 10; i++) {
+//            GROUPS.add(new Group(i, "Group name " + i, "Description " + i, "icon" + 1 + ".png"));
+//        }
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(IWebNoteAPI.ENDPOINT)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        IWebNoteAPI webNoteAPI = retrofit.create(IWebNoteAPI.class);
+        Call<List<Group>> call = webNoteAPI.getGroupList();
+        call.enqueue(new Callback<List<Group>>() {
+            @Override
+            public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
+                int statusCode = response.code();
+                GROUPS = response.body();
+                System.out.println("-->" + response.body());
+            }
+
+            @Override
+            public void onFailure(Call<List<Group>> call, Throwable t) {
+                System.err.println("API ERROR : " + t.getMessage());
+            }
+        });
     }
 
     public static Group findGroupById(int id) {
@@ -49,25 +70,7 @@ public class GroupStore {
 
     public static List<Group> getGroupsFromAPI() {
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(MainActivity.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        IWebNoteAPI webNoteAPI = retrofit.create(IWebNoteAPI.class);
-        Call<List<Group>> call = webNoteAPI.getGroupList();
-        call.enqueue(new Callback<List<Group>>() {
-            @Override
-            public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
-                int statusCode = response.code();
-                groups.addAll(response.body());
-            }
-
-            @Override
-            public void onFailure(Call<List<Group>> call, Throwable t) {
-                System.err.println("API ERROR");
-            }
-        });
 
         return groups;
     }

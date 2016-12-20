@@ -84,13 +84,29 @@ public class Group {
     }
 
     /**
-     *  The list of user of this group
+     *
      */
-    private ArrayList<User> users;
+    private String created_at;
 
-    public ArrayList<User> getUsers() { return users; }
+    public String getCreated_at() { return created_at; }
 
-    public void setUsers(ArrayList<User> users) { this.users = users; }
+    public void setCreated_at(String created_at) { this.created_at = created_at; }
+
+
+    private String updated_at;
+
+    public String getUpdated_at() { return updated_at; }
+
+    public void setUpdated_at(String updated_at) { this.updated_at = updated_at; }
+
+    /**
+     *  The list of user of this group
+//     */
+//    private ArrayList<User> users;
+//
+//    public ArrayList<User> getUsers() { return users; }
+//
+//    public void setUsers(ArrayList<User> users) { this.users = users; }
 
     /*--------------------------------------------------------------------------------------------*\
      *  OBJECT METHOD OVERRIDES

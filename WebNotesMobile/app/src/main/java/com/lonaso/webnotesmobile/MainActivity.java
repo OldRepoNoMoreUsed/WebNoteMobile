@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity
 
     private String m_currentFragmentTag; //save the current tag button to redisplay after a orientation change
     private static final String CURRENT_FRAGMENT_TAG = "currentFragmentTag"; //used for the bundle key
-    public static final String BASE_URL = "http://localhost/api/";
     protected OnBackPressedListener onBackPressedListener;
 
     private NoteStore noteStore = new NoteStore();
