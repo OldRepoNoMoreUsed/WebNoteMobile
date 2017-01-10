@@ -11,6 +11,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.lonaso.webnotesmobile.R;
+import com.lonaso.webnotesmobile.groups.Group;
+import com.lonaso.webnotesmobile.groups.GroupStore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,17 +28,24 @@ public class UserAdapter extends BaseAdapter implements Filterable {
     public UserAdapter(Context context) {
         super();
         this.context = context;
-        construct();
+        construct(0);
     }
 
-    private void construct() {
-        filteredUsers = UserStore.USERS1;
+    public UserAdapter(Context context, int groupID) {
+        super();
+        this.context = context;
+        construct(groupID);
+    }
+
+    private void construct(int groupID) {
+        UserStore.USERS = GroupStore.GROUPS.get(groupID).getUsers();
+        filteredUsers = UserStore.USERS;
 
         userFilter = new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 if(constraint == null) {
-                    filteredUsers = UserStore.USERS1;
+                    filteredUsers = UserStore.USERS;
                 } else {
                     filteredUsers = new ArrayList<>();
                     for(User user : UserStore.USERS) {

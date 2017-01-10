@@ -20,10 +20,21 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.lonaso.webnotesmobile.IWebNoteAPI;
 import com.lonaso.webnotesmobile.ImagePicker;
 import com.lonaso.webnotesmobile.MainActivity;
 import com.lonaso.webnotesmobile.R;
 import com.lonaso.webnotesmobile.users.UserAdapter;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class GroupDetailsFragment extends Fragment implements MainActivity.OnBackPressedListener{
 
@@ -33,6 +44,8 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
     private UserAdapter userAdapter;
     private Button saveGroupButton;
     private ImageView groupImageView;
+    private Group groupDisplayed;
+    private int groupID;
     private static final int PICK_IMAGE_ID = 234;
 
 
@@ -53,7 +66,13 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
         super.onActivityCreated(savedInstanceState);
 
         getActivity().setTitle("Détails du groupe");
-//        getActivity()/
+
+        Intent intent = getActivity().getIntent();
+        if(intent.getExtras() != null) {
+            int id = intent.getIntExtra("id", 0);
+//            loadGroupInfos(id);
+            groupID = id;
+        }
 
         ((MainActivity)getActivity()).setOnBackPressedListener(this);
         retrieveViews(getView());
@@ -68,29 +87,30 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
     }
 
     private void setUpViews(final Activity activity) {
-        userAdapter = new UserAdapter(activity);
+//        while(groupDisplayed == null) {}
+        userAdapter = new UserAdapter(activity, groupID);
         userListView.setAdapter(userAdapter);
-        userListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-                new AlertDialog.Builder(getContext())
-                        .setTitle("Supression d'un membre")
-                        .setMessage("Etes-vous certain de vouloir supprimer ce membre du groupe ?")
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(getContext(), "Suppression...", Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        })
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
-                return true;
-            }
-        });
+//        userListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
+//            @Override
+//            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+//                new AlertDialog.Builder(getContext())
+//                        .setTitle("Supression d'un membre")
+//                        .setMessage("Etes-vous certain de vouloir supprimer ce membre du groupe ?")
+//                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                Toast.makeText(getContext(), "Suppression...", Toast.LENGTH_SHORT).show();
+//                            }
+//                        })
+//                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int which) {
+//
+//                            }
+//                        })
+//                        .setIcon(android.R.drawable.ic_dialog_alert)
+//                        .show();
+//                return true;
+//            }
+//        });
 
         userSearchView.setSubmitButtonEnabled(true);
         userSearchView.setQueryHint("Nom d'utilisateur ...");
@@ -126,6 +146,33 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
     public void onPickImage(View view) {
         Intent chooseImageIntent = ImagePicker.getPickImageIntent(getActivity());
         startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
+    }
+
+    private void loadGroupInfos(int id) {
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+                .create();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(IWebNoteAPI.ENDPOINT)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        IWebNoteAPI webNoteAPI = retrofit.create(IWebNoteAPI.class);
+        Call<Group> call = webNoteAPI.getGroup(id);
+        call.enqueue(new Callback<Group>() {
+            @Override
+            public void onResponse(Call<Group> call, Response<Group> response) {
+                int statusCode = response.code();
+                groupDisplayed = response.body();
+                System.out.println("-->" + response.body());
+            }
+
+            @Override
+            public void onFailure(Call<Group> call, Throwable t) {
+                System.err.println("API ERROR : " + t.getMessage());
+            }
+        });
     }
 
     @Override

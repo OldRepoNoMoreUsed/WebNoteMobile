@@ -31,6 +31,7 @@ public class GroupAdapter extends BaseAdapter implements Filterable {
     }
 
     private void construct() {
+
         filteredGroups = GroupStore.GROUPS;
 
         groupFilter = new Filter() {

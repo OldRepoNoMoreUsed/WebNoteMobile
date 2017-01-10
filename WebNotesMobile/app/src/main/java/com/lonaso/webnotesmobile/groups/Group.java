@@ -101,12 +101,12 @@ public class Group {
 
     /**
      *  The list of user of this group
-//     */
-//    private ArrayList<User> users;
-//
-//    public ArrayList<User> getUsers() { return users; }
-//
-//    public void setUsers(ArrayList<User> users) { this.users = users; }
+     */
+    private List<User> users;
+
+    public List<User> getUsers() { return users; }
+
+    public void setUsers(List<User> users) { this.users = users; }
 
     /*--------------------------------------------------------------------------------------------*\
      *  OBJECT METHOD OVERRIDES

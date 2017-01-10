@@ -1,5 +1,7 @@
 package com.lonaso.webnotesmobile.groups;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.lonaso.webnotesmobile.IWebNoteAPI;
 import com.lonaso.webnotesmobile.MainActivity;
 
@@ -22,19 +24,23 @@ public class GroupStore {
 //            GROUPS.add(new Group(i, "Group name " + i, "Description " + i, "icon" + 1 + ".png"));
 //        }
 
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+                .create();
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(IWebNoteAPI.ENDPOINT)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
         IWebNoteAPI webNoteAPI = retrofit.create(IWebNoteAPI.class);
-        Call<List<Group>> call = webNoteAPI.getGroupList();
+        Call<List<Group>> call = webNoteAPI.getGroups();
         call.enqueue(new Callback<List<Group>>() {
             @Override
             public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
                 int statusCode = response.code();
                 GROUPS = response.body();
-                System.out.println("-->" + response.body());
+//                System.out.println("-->" + response.body());
             }
 
             @Override

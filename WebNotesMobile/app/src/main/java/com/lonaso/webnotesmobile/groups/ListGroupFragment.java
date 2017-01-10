@@ -18,6 +18,8 @@ import android.widget.SearchView;
 import com.lonaso.webnotesmobile.MainActivity;
 import com.lonaso.webnotesmobile.R;
 
+import java.util.List;
+
 
 public class ListGroupFragment extends Fragment implements MainActivity.OnBackPressedListener {
 
@@ -64,6 +66,9 @@ public class ListGroupFragment extends Fragment implements MainActivity.OnBackPr
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Group group = (Group) groupListView.getItemAtPosition(position);
 
+                Bundle bundle = new Bundle();
+                bundle.putInt("id", group.getId());
+
                 GroupDetailsFragment groupDetailsFragment = (GroupDetailsFragment) getFragmentManager().findFragmentById(R.id.groupDetailsFragment);
 
                 if (groupDetailsFragment != null && groupDetailsFragment.isInLayout()) {
@@ -72,6 +77,7 @@ public class ListGroupFragment extends Fragment implements MainActivity.OnBackPr
                     Fragment fragment = new GroupDetailsFragment();
                     //replacing the fragment
                     if (fragment != null) {
+                        fragment.setArguments(bundle);
                         FragmentTransaction ft = getFragmentManager().beginTransaction();
                         ft.replace(R.id.content_frame, fragment);
                         ft.addToBackStack(null);
