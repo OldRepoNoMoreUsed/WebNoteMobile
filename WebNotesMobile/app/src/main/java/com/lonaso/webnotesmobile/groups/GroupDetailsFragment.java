@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -27,7 +30,10 @@ import com.lonaso.webnotesmobile.ImagePicker;
 import com.lonaso.webnotesmobile.MainActivity;
 import com.lonaso.webnotesmobile.R;
 import com.lonaso.webnotesmobile.users.UserAdapter;
+import com.lonaso.webnotesmobile.users.UserStore;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.List;
 
 import retrofit2.Call;
@@ -44,8 +50,9 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
     private UserAdapter userAdapter;
     private Button saveGroupButton;
     private ImageView groupImageView;
-    private Group groupDisplayed;
+    private EditText groupNameText;
     private int groupID;
+    private Bitmap groupIcon;
     private static final int PICK_IMAGE_ID = 234;
 
 
@@ -67,11 +74,10 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
 
         getActivity().setTitle("Détails du groupe");
 
-        Intent intent = getActivity().getIntent();
-        if(intent.getExtras() != null) {
-            int id = intent.getIntExtra("id", 0);
-//            loadGroupInfos(id);
-            groupID = id;
+
+        Bundle bundle = this.getArguments();
+        if(bundle != null) {
+            groupID = bundle.getInt("id", 0);
         }
 
         ((MainActivity)getActivity()).setOnBackPressedListener(this);
@@ -84,33 +90,72 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
         userSearchView = (SearchView) view.findViewById(R.id.userSearch);
         saveGroupButton = (Button) view.findViewById(R.id.saveGroupButton);
         groupImageView = (ImageView) view.findViewById(R.id.groupImageView);
+        groupNameText = (EditText) view.findViewById(R.id.groupNameText);
     }
 
     private void setUpViews(final Activity activity) {
-//        while(groupDisplayed == null) {}
+        Thread th = new Thread() {
+            @Override
+            public void run() {
+                UserStore.loadUsersFromGroup(groupID);
+                GroupStore.loadGroup(groupID);
+            }
+        };
+
+        th.start();
+        try {
+            th.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            System.err.println("HELLO");
+        }
+
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    InputStream in = new URL(GroupStore.GROUP.getIcon()).openStream();
+                    groupIcon = BitmapFactory.decodeStream(in);
+                } catch (Exception e) {
+                    // log error
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                if (groupIcon != null)
+                    groupImageView.setImageBitmap(groupIcon);
+            }
+
+        }.execute();
+
+        groupNameText.setText(GroupStore.GROUP.getName());
+//        groupImageView.setImageBitmap(new Bitmap());
         userAdapter = new UserAdapter(activity, groupID);
         userListView.setAdapter(userAdapter);
-//        userListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
-//            @Override
-//            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-//                new AlertDialog.Builder(getContext())
-//                        .setTitle("Supression d'un membre")
-//                        .setMessage("Etes-vous certain de vouloir supprimer ce membre du groupe ?")
-//                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                Toast.makeText(getContext(), "Suppression...", Toast.LENGTH_SHORT).show();
-//                            }
-//                        })
-//                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int which) {
-//
-//                            }
-//                        })
-//                        .setIcon(android.R.drawable.ic_dialog_alert)
-//                        .show();
-//                return true;
-//            }
-//        });
+        userListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Supression d'un membre")
+                        .setMessage("Etes-vous certain de vouloir supprimer ce membre du groupe ?")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                UserStore.removeUser(position);
+                                userAdapter.notifyDataSetChanged();
+                                Toast.makeText(getContext(), "Suppression...", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+                return true;
+            }
+        });
 
         userSearchView.setSubmitButtonEnabled(true);
         userSearchView.setQueryHint("Nom d'utilisateur ...");
@@ -148,33 +193,6 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
         startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
     }
 
-    private void loadGroupInfos(int id) {
-        Gson gson = new GsonBuilder()
-                .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
-                .create();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(IWebNoteAPI.ENDPOINT)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
-
-        IWebNoteAPI webNoteAPI = retrofit.create(IWebNoteAPI.class);
-        Call<Group> call = webNoteAPI.getGroup(id);
-        call.enqueue(new Callback<Group>() {
-            @Override
-            public void onResponse(Call<Group> call, Response<Group> response) {
-                int statusCode = response.code();
-                groupDisplayed = response.body();
-                System.out.println("-->" + response.body());
-            }
-
-            @Override
-            public void onFailure(Call<Group> call, Throwable t) {
-                System.err.println("API ERROR : " + t.getMessage());
-            }
-        });
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null)
@@ -204,13 +222,11 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         getFragmentManager().popBackStack();
-//                        onDestroy();
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // do nothing
-                        Toast.makeText(getContext(), "Vous n'avez pas quitté l'application", Toast.LENGTH_LONG).show();
                     }
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
@@ -218,7 +234,6 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
     }
     @Override
     public void onDestroy(){
-        Toast.makeText(getContext(), "Destroy", Toast.LENGTH_LONG).show();
         super.onDestroy();
     }
 }

@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.lonaso.webnotesmobile.IWebNoteAPI;
 import com.lonaso.webnotesmobile.users.User;
 
 import java.util.ArrayList;
@@ -76,7 +77,7 @@ public class Group {
     private String icon;
 
     public String getIcon() {
-        return icon;
+        return IWebNoteAPI.STORAGE + icon;
     }
 
     public void setIcon(String icon) {
@@ -99,14 +100,6 @@ public class Group {
 
     public void setUpdated_at(String updated_at) { this.updated_at = updated_at; }
 
-    /**
-     *  The list of user of this group
-     */
-    private List<User> users;
-
-    public List<User> getUsers() { return users; }
-
-    public void setUsers(List<User> users) { this.users = users; }
 
     /*--------------------------------------------------------------------------------------------*\
      *  OBJECT METHOD OVERRIDES
@@ -131,19 +124,5 @@ public class Group {
         result = 31 * result + (getName() == null ? 0 : getName().hashCode());
 
         return result;
-    }
-
-    /*--------------------------------------------------------------------------------------------*\
-     *  OBJECT METHOD OVERRIDES
-    \*--------------------------------------------------------------------------------------------*/
-    /**
-     *
-     * @param response
-     * @return
-     */
-    public static Group parseJSON(String response) {
-        Gson gson = new GsonBuilder().create();
-        Group group = gson.fromJson(response, Group.class);
-        return group;
     }
 }

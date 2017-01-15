@@ -17,6 +17,7 @@ import android.widget.SearchView;
 
 import com.lonaso.webnotesmobile.MainActivity;
 import com.lonaso.webnotesmobile.R;
+import com.lonaso.webnotesmobile.users.UserStore;
 
 import java.util.List;
 
@@ -59,6 +60,20 @@ public class ListGroupFragment extends Fragment implements MainActivity.OnBackPr
     }
 
     private void setUpViews(final Activity activity) {
+        Thread th = new Thread() {
+            @Override
+            public void run() {
+                GroupStore.loadGroups();
+            }
+        };
+
+        th.start();
+        try {
+            th.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            System.err.println("HELLO");
+        }
         groupAdapter = new GroupAdapter(activity);
         groupListView.setAdapter(groupAdapter);
         groupListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

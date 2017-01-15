@@ -10,8 +10,13 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 public interface IWebNoteAPI {
-//    String ENDPOINT = "http://157.26.108.189/api/";
-    String ENDPOINT = "http://157.26.109.109/api/";
+//    String SERVER = "http://157.26.109.109/
+    String SERVER = "http://192.168.1.115/";
+    String STORAGE = SERVER + "storage/";
+    String ENDPOINT = SERVER + "api/";
+
+    @GET("user/")
+    Call<List<User>> getUsers();
 
     @GET("group/")
     Call<List<Group>> getGroups();
