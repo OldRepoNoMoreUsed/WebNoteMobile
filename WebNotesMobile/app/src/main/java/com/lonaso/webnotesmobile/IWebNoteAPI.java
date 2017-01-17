@@ -26,6 +26,9 @@ public interface IWebNoteAPI {
     @GET("user/")
     Call<List<User>> getUsers();
 
+    @GET("user/{user}")
+    Call<User> getUser(@Path("user") int userID);
+
     @GET("group/")
     Call<List<Group>> getGroups();
 
