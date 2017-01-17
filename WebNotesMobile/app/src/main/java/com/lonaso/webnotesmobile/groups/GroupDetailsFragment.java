@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,24 +25,19 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.lonaso.webnotesmobile.IWebNoteAPI;
 import com.lonaso.webnotesmobile.ImagePicker;
 import com.lonaso.webnotesmobile.MainActivity;
 import com.lonaso.webnotesmobile.R;
 import com.lonaso.webnotesmobile.users.UserAdapter;
 import com.lonaso.webnotesmobile.users.UserStore;
 
+import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 public class GroupDetailsFragment extends Fragment implements MainActivity.OnBackPressedListener{
 
@@ -49,8 +46,9 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
     private SearchView userSearchView;
     private UserAdapter userAdapter;
     private Button saveGroupButton;
-    private ImageView groupImageView;
-    private EditText groupNameText;
+    private ImageView groupIconImageView;
+    private EditText groupNameEditText;
+    private EditText groupDescriptionEditText;
     private int groupID;
     private Bitmap groupIcon;
     private static final int PICK_IMAGE_ID = 234;
@@ -89,8 +87,9 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
         userListView = (ListView) view.findViewById(R.id.userListView);
         userSearchView = (SearchView) view.findViewById(R.id.userSearch);
         saveGroupButton = (Button) view.findViewById(R.id.saveGroupButton);
-        groupImageView = (ImageView) view.findViewById(R.id.groupImageView);
-        groupNameText = (EditText) view.findViewById(R.id.groupNameText);
+        groupIconImageView = (ImageView) view.findViewById(R.id.groupImageView);
+        groupNameEditText = (EditText) view.findViewById(R.id.groupNameEditText);
+        groupDescriptionEditText = (EditText) view.findViewById(R.id.groupDescriptionEditText);
     }
 
     private void setUpViews(final Activity activity) {
@@ -125,13 +124,14 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
             @Override
             protected void onPostExecute(Void result) {
                 if (groupIcon != null)
-                    groupImageView.setImageBitmap(groupIcon);
+                    groupIconImageView.setImageBitmap(groupIcon);
             }
 
         }.execute();
 
-        groupNameText.setText(GroupStore.GROUP.getName());
-//        groupImageView.setImageBitmap(new Bitmap());
+        groupNameEditText.setText(GroupStore.GROUP.getName());
+        groupDescriptionEditText.setText(GroupStore.GROUP.getDescription());
+
         userAdapter = new UserAdapter(activity, groupID);
         userListView.setAdapter(userAdapter);
         userListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
@@ -180,10 +180,48 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
             }
         });
 
-        groupImageView.setOnClickListener(new View.OnClickListener() {
+        groupIconImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onPickImage(view);
+            }
+        });
+
+        saveGroupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Bitmap bitmap = ((BitmapDrawable) groupIconImageView.getDrawable()).getBitmap();
+//                Uri uri = MainActivity.getImageUri(getActivity().getApplicationContext(), bitmap);
+//                File file = new File(uri.toString());
+
+
+                GroupStore.GROUP.setName(groupNameEditText.getText().toString());
+                GroupStore.GROUP.setDescription(groupDescriptionEditText.getText().toString());
+
+
+                // create RequestBody instance from file
+//                RequestBody requestFile =
+//                        RequestBody.create(MediaType.parse("multipart/form-data"), file);
+//
+//                // MultipartBody.Part is used to send also the actual file name
+//                MultipartBody.Part icon =
+//                        MultipartBody.Part.createFormData("icon", file.getName(), requestFile);
+
+                // add another part within the multipart request
+                RequestBody description =
+                        RequestBody.create(
+                                MediaType.parse("multipart/form-data"), GroupStore.GROUP.getDescription());
+                RequestBody name =
+                        RequestBody.create(
+                                MediaType.parse("multipart/form-data"), GroupStore.GROUP.getName());
+
+                GroupStore.updateGroup(description, name);
+
+//                if(file.delete()) {
+//                    System.out.println("--> OK");
+//                } else {
+//                    System.out.println("--> ERROR");
+//                }
             }
         });
     }
@@ -200,7 +238,7 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
             switch(requestCode) {
                 case PICK_IMAGE_ID:
                     Bitmap photo = (Bitmap) data.getExtras().get("data");
-                    groupImageView.setImageBitmap(photo);
+                    groupIconImageView.setImageBitmap(photo);
                     break;
                 default:
                     break;

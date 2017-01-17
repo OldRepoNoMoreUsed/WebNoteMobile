@@ -24,7 +24,16 @@
         android:inputType="textPersonName"
         android:text="Nom du groupe"
         android:ems="10"
-        android:id="@+id/groupNameText" />
+        android:id="@+id/groupNameEditText"
+        android:textAppearance="@android:style/TextAppearance.Material.Large.Inverse" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/groupDescriptionEditText"
+        android:text="Description" />
 
     <SearchView
         android:layout_width="match_parent"
@@ -36,7 +45,7 @@
     <ListView
         android:layout_width="match_parent"
         android:id="@+id/userListView"
-        android:layout_height="287dp" />
+        android:layout_height="237dp" />
 
     <Button
         android:text="Enregister"

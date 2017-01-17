@@ -16,7 +16,7 @@
         <ImageView
             android:layout_height="50dp"
             app:srcCompat="@drawable/ic_menu_compte"
-            android:id="@+id/userImageView"
+            android:id="@+id/userAvatarImageView"
             android:layout_weight="1"
             android:background="@android:color/darker_gray"
             android:layout_width="50dp"
@@ -27,12 +27,10 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="20"
-            android:textAppearance="@android:style/TextAppearance.Material"
-            android:textSize="14sp"
+            android:textAppearance="@android:style/TextAppearance.Material.Large"
             android:paddingLeft="10dp"
-            android:textAllCaps="false"
-            android:textAlignment="viewStart"
-            android:id="@+id/userName"/>
+            android:id="@+id/userNameTextView"
+            android:textAllCaps="false" />
 
     </LinearLayout>
 
