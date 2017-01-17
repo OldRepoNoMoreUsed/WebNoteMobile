@@ -6,6 +6,7 @@ package com.lonaso.webnotesmobile.NotePackage;
 
 public class Note {
 
+    private int id;
     private String title;
     private String content;
     private String description;
@@ -15,6 +16,8 @@ public class Note {
         this.description = description;
         this.content = content;
     }
+
+    public int getId(){return id;}
 
     public String getTitle(){
         return title;

@@ -1,5 +1,6 @@
 package com.lonaso.webnotesmobile;
 
+import com.lonaso.webnotesmobile.NotePackage.Note;
 import com.lonaso.webnotesmobile.groups.Group;
 import com.lonaso.webnotesmobile.users.User;
 
@@ -11,7 +12,7 @@ import retrofit2.http.Path;
 
 public interface IWebNoteAPI {
 //    String SERVER = "http://157.26.109.109/
-    String SERVER = "http://192.168.1.115/";
+    String SERVER = "http://webnotes/";
     String STORAGE = SERVER + "storage/";
     String ENDPOINT = SERVER + "api/";
 
@@ -26,4 +27,7 @@ public interface IWebNoteAPI {
 
     @GET("group/{group}/users")
     Call<List<User>> getUsersFromGroup(@Path("group") int groupID);
+
+    @GET("note/{user}/notes")
+    Call<List<Note>> getNotesFromUser(@Path("user") int userID);
 }
