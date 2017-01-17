@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/groupDescriptionTextView"
                 android:textAppearance="@android:style/TextAppearance.Material.Small"
-                android:layout_weight="1" />
+                android:layout_weight="2" />
         </LinearLayout>
 
     </LinearLayout>

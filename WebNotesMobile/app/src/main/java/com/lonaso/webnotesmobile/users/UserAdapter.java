@@ -96,8 +96,8 @@ public class UserAdapter extends BaseAdapter implements Filterable {
 
             holder = new UserHolder();
 
-            holder.name = (TextView) convertView.findViewById(R.id.userName);
-            holder.avatar = (ImageView) convertView.findViewById(R.id.userImageView);
+            holder.nameTextView = (TextView) convertView.findViewById(R.id.userNameTextView);
+            holder.avatarImageView = (ImageView) convertView.findViewById(R.id.userAvatarImageView);
 
             convertView.setTag(holder);
         } else {
@@ -106,7 +106,7 @@ public class UserAdapter extends BaseAdapter implements Filterable {
 
         user = filteredUsers.get(position);
 
-        holder.name.setText(user.getName());
+        holder.nameTextView.setText(user.getName());
 
         new AsyncTask<Void, Void, Void>() {
             @Override
@@ -123,7 +123,7 @@ public class UserAdapter extends BaseAdapter implements Filterable {
             @Override
             protected void onPostExecute(Void result) {
                 if (userAvatar != null)
-                    holder.avatar.setImageBitmap(userAvatar);
+                    holder.avatarImageView.setImageBitmap(userAvatar);
             }
 
         }.execute();
@@ -140,7 +140,7 @@ public class UserAdapter extends BaseAdapter implements Filterable {
      *  Wrapper class for our user views
      */
     private static class UserHolder {
-        TextView name;
-        ImageView avatar;
+        TextView nameTextView;
+        ImageView avatarImageView;
     }
 }

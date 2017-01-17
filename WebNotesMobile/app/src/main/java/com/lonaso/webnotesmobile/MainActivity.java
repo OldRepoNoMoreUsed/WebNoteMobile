@@ -1,6 +1,10 @@
 package com.lonaso.webnotesmobile;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
@@ -18,6 +22,8 @@ import com.lonaso.webnotesmobile.NotePackage.NoteStore;
 import com.lonaso.webnotesmobile.groups.ListGroupFragment;
 import com.lonaso.webnotesmobile.NotePackage.ListeNote;
 import com.lonaso.webnotesmobile.users.UserAccountFragment;
+
+import java.io.ByteArrayOutputStream;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -144,5 +150,14 @@ public class MainActivity extends AppCompatActivity
     protected void onDestroy() {
         onBackPressedListener = null;
         super.onDestroy();
+    }
+
+    // Colin's blog
+    // https://colinyeoh.wordpress.com/2012/05/18/android-getting-image-uri-from-bitmap/
+    public static Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
     }
 }
