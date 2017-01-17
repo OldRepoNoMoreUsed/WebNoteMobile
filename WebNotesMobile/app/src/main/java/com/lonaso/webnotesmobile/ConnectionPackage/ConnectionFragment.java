@@ -13,6 +13,8 @@ import android.widget.ImageView;
 
 import com.lonaso.webnotesmobile.R;
 import com.lonaso.webnotesmobile.groups.ListGroupFragment;
+import com.lonaso.webnotesmobile.users.User;
+import com.lonaso.webnotesmobile.users.UserStore;
 
 /**
  * Created by steve.nadalin on 27/11/2016.
@@ -71,12 +73,31 @@ public class ConnectionFragment extends Fragment{
         connect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fragment fragment = new ListGroupFragment();
-                //replacing the fragment
-                if (fragment != null) {
-                    FragmentTransaction ft = getFragmentManager().beginTransaction();
-                    ft.replace(R.id.content_frame, fragment);
-                    ft.commit();
+                Thread thread = new Thread(){
+                    @Override
+                    public void run(){
+                        UserStore.loadUsers();
+                    }
+                };
+                thread.start();
+                try{
+                    thread.join();
+                }catch(InterruptedException e){
+                    e.printStackTrace();
+                    System.err.println("FUCK");
+                }
+                for (User user: UserStore.USERS) {
+                    if(user.getEmail() == userEmail.toString() && user.getPassword() == userPassword.toString()){
+                        UserStore.loadUser(user.getId());
+                        Fragment fragment = new ListGroupFragment();
+                        //replacing the fragment
+                        if (fragment != null) {
+                            FragmentTransaction ft = getFragmentManager().beginTransaction();
+                            ft.replace(R.id.content_frame, fragment);
+                            ft.commit();
+                        }
+                    }
+
                 }
             }
         });

@@ -20,6 +20,7 @@ import com.lonaso.webnotesmobile.groups.ListGroupFragment;
 public class UserAccountFragment extends Fragment{
     public static final String TAG = "UserAccountFragment";
     private Button modifyAccount;
+    private int userID;
     private EditText userEmail;
     private EditText userPassword;
     private EditText userPseudo;
