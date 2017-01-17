@@ -86,8 +86,10 @@ public class ConnectionFragment extends Fragment{
                     e.printStackTrace();
                     System.err.println("FUCK");
                 }
+
+
                 for (User user: UserStore.USERS) {
-                    if(user.getEmail() == userEmail.toString() && user.getPassword() == userPassword.toString()){
+                    if(user.getEmail().equals(userEmail.getText()) && user.getPassword().equals(userPassword.getText())){
                         UserStore.loadUser(user.getId());
                         Fragment fragment = new ListGroupFragment();
                         //replacing the fragment
@@ -96,8 +98,8 @@ public class ConnectionFragment extends Fragment{
                             ft.replace(R.id.content_frame, fragment);
                             ft.commit();
                         }
+//                        System.out.println(user.getEmail());
                     }
-
                 }
             }
         });

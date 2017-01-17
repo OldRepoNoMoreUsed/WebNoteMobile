@@ -93,18 +93,11 @@ public class UserStore {
 
         IWebNoteAPI webNoteAPI = retrofit.create(IWebNoteAPI.class);
         Call<List<User>> call = webNoteAPI.getUsers();
-        call.enqueue(new Callback<List<User>>() {
-            @Override
-            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-                int statusCode = response.code();
-                USERS = response.body();
-            }
-
-            @Override
-            public void onFailure(Call<List<User>> call, Throwable t) {
-                System.err.println("API ERROR : " + t.getMessage());
-            }
-        });
+        try {
+            USERS = call.execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void loadUser(int userID) {
