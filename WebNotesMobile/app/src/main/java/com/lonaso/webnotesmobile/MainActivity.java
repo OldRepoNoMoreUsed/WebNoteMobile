@@ -19,6 +19,9 @@ import com.lonaso.webnotesmobile.groups.ListGroupFragment;
 import com.lonaso.webnotesmobile.NotePackage.ListeNote;
 import com.lonaso.webnotesmobile.users.UserAccountFragment;
 
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 

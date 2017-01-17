@@ -1,17 +1,22 @@
 package com.lonaso.webnotesmobile.users;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.Switch;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lonaso.webnotesmobile.R;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,21 +27,29 @@ public class UserAdapter extends BaseAdapter implements Filterable {
     private List<User> filteredUsers;
 
     private Filter userFilter;
+    private Bitmap userAvatar;
+    private User user;
 
     public UserAdapter(Context context) {
         super();
         this.context = context;
-        construct();
+        construct(0);
     }
 
-    private void construct() {
-        filteredUsers = UserStore.USERS1;
+    public UserAdapter(Context context, int groupID) {
+        super();
+        this.context = context;
+        construct(groupID);
+    }
+
+    private void construct(final int groupID) {
+        filteredUsers = UserStore.USERS;
 
         userFilter = new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 if(constraint == null) {
-                    filteredUsers = UserStore.USERS1;
+                    filteredUsers = UserStore.USERS;
                 } else {
                     filteredUsers = new ArrayList<>();
                     for(User user : UserStore.USERS) {
@@ -76,7 +89,7 @@ public class UserAdapter extends BaseAdapter implements Filterable {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        UserHolder holder;
+        final UserHolder holder;
 
         if(convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.user_list_row, parent, false);
@@ -84,15 +97,36 @@ public class UserAdapter extends BaseAdapter implements Filterable {
             holder = new UserHolder();
 
             holder.name = (TextView) convertView.findViewById(R.id.userName);
+            holder.avatar = (ImageView) convertView.findViewById(R.id.userImageView);
 
             convertView.setTag(holder);
         } else {
             holder = (UserHolder) convertView.getTag();
         }
 
-        User user = filteredUsers.get(position);
+        user = filteredUsers.get(position);
 
         holder.name.setText(user.getName());
+
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    InputStream in = new URL(user.getAvatar()).openStream();
+                    userAvatar = BitmapFactory.decodeStream(in);
+                } catch (Exception e) {
+                    // log error
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                if (userAvatar != null)
+                    holder.avatar.setImageBitmap(userAvatar);
+            }
+
+        }.execute();
 
         return convertView;
     }
@@ -107,5 +141,6 @@ public class UserAdapter extends BaseAdapter implements Filterable {
      */
     private static class UserHolder {
         TextView name;
+        ImageView avatar;
     }
 }

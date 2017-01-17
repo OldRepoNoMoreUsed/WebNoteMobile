@@ -2,6 +2,14 @@ package com.lonaso.webnotesmobile.groups;
 
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.lonaso.webnotesmobile.IWebNoteAPI;
+import com.lonaso.webnotesmobile.users.User;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *  Class representing groups in this application
  *
@@ -69,12 +77,29 @@ public class Group {
     private String icon;
 
     public String getIcon() {
-        return icon;
+        return IWebNoteAPI.STORAGE + icon;
     }
 
     public void setIcon(String icon) {
         this.icon = icon;
     }
+
+    /**
+     *
+     */
+    private String created_at;
+
+    public String getCreated_at() { return created_at; }
+
+    public void setCreated_at(String created_at) { this.created_at = created_at; }
+
+
+    private String updated_at;
+
+    public String getUpdated_at() { return updated_at; }
+
+    public void setUpdated_at(String updated_at) { this.updated_at = updated_at; }
+
 
     /*--------------------------------------------------------------------------------------------*\
      *  OBJECT METHOD OVERRIDES

@@ -1,16 +1,31 @@
 package com.lonaso.webnotesmobile.groups;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.lonaso.webnotesmobile.IWebNoteAPI;
+import com.lonaso.webnotesmobile.MainActivity;
+import com.lonaso.webnotesmobile.users.UserAdapter;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.BrokenBarrierException;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class GroupStore {
 
-    public static final List<Group> GROUPS = new ArrayList<>();
+    public static List<Group> GROUPS = new ArrayList<>();
+    public static Group GROUP;
 
     static {
-        for(int i = 0; i < 10; i++) {
-            GROUPS.add(new Group(i, "Group name " + i, "Description " + i, "icon" + 1 + ".png"));
-        }
+//        for(int i = 0; i < 10; i++) {
+//            GROUPS.add(new Group(i, "Group name " + i, "Description " + i, "icon" + 1 + ".png"));
+//        }
     }
 
     public static Group findGroupById(int id) {
@@ -35,5 +50,43 @@ public class GroupStore {
         }
 
         return result;
+    }
+
+    public static void loadGroups() {
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+                .create();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(IWebNoteAPI.ENDPOINT)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        IWebNoteAPI webNoteAPI = retrofit.create(IWebNoteAPI.class);
+        Call<List<Group>> call = webNoteAPI.getGroups();
+        try {
+            GROUPS = call.execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void loadGroup(int groupID) {
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+                .create();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(IWebNoteAPI.ENDPOINT)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        IWebNoteAPI webNoteAPI = retrofit.create(IWebNoteAPI.class);
+        Call<Group> call = webNoteAPI.getGroup(groupID);
+        try {
+            GROUP = call.execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

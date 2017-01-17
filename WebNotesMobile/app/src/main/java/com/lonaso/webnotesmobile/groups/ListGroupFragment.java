@@ -17,6 +17,9 @@ import android.widget.SearchView;
 
 import com.lonaso.webnotesmobile.MainActivity;
 import com.lonaso.webnotesmobile.R;
+import com.lonaso.webnotesmobile.users.UserStore;
+
+import java.util.List;
 
 
 public class ListGroupFragment extends Fragment implements MainActivity.OnBackPressedListener {
@@ -43,7 +46,7 @@ public class ListGroupFragment extends Fragment implements MainActivity.OnBackPr
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        ((MainActivity)getActivity()).setOnBackPressedListener(this);
+        ((MainActivity) getActivity()).setOnBackPressedListener(this);
         getActivity().setTitle("Liste des groupes");
         retrieveViews(getView());
         setUpViews(getActivity());
@@ -57,6 +60,20 @@ public class ListGroupFragment extends Fragment implements MainActivity.OnBackPr
     }
 
     private void setUpViews(final Activity activity) {
+        Thread th = new Thread() {
+            @Override
+            public void run() {
+                GroupStore.loadGroups();
+            }
+        };
+
+        th.start();
+        try {
+            th.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            System.err.println("HELLO");
+        }
         groupAdapter = new GroupAdapter(activity);
         groupListView.setAdapter(groupAdapter);
         groupListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -64,14 +81,18 @@ public class ListGroupFragment extends Fragment implements MainActivity.OnBackPr
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Group group = (Group) groupListView.getItemAtPosition(position);
 
+                Bundle bundle = new Bundle();
+                bundle.putInt("id", group.getId());
+
                 GroupDetailsFragment groupDetailsFragment = (GroupDetailsFragment) getFragmentManager().findFragmentById(R.id.groupDetailsFragment);
 
-                if(groupDetailsFragment != null && groupDetailsFragment.isInLayout()) {
+                if (groupDetailsFragment != null && groupDetailsFragment.isInLayout()) {
                     //groupDetailsFragment.updateDetails(group);
                 } else {
                     Fragment fragment = new GroupDetailsFragment();
                     //replacing the fragment
                     if (fragment != null) {
+                        fragment.setArguments(bundle);
                         FragmentTransaction ft = getFragmentManager().beginTransaction();
                         ft.replace(R.id.content_frame, fragment);
                         ft.addToBackStack(null);
@@ -94,7 +115,7 @@ public class ListGroupFragment extends Fragment implements MainActivity.OnBackPr
             public boolean onQueryTextChange(String newText) {
                 Filter filter = groupAdapter.getFilter();
 
-                if(TextUtils.isEmpty(newText)) {
+                if (TextUtils.isEmpty(newText)) {
                     filter.filter(null);
                 } else {
                     filter.filter(newText);

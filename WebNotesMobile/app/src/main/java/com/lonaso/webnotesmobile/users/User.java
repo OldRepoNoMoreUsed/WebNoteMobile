@@ -2,6 +2,7 @@ package com.lonaso.webnotesmobile.users;
 
 import android.text.TextUtils;
 
+import com.lonaso.webnotesmobile.IWebNoteAPI;
 import com.lonaso.webnotesmobile.groups.Group;
 
 /**
@@ -89,7 +90,7 @@ public class User {
     private String avatar;
 
     public String getAvatar() {
-        return avatar;
+        return IWebNoteAPI.STORAGE + avatar;
     }
 
     public void setAvatar(String avatar) {
