@@ -214,6 +214,10 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
                 RequestBody name =
                         RequestBody.create(
                                 MediaType.parse("multipart/form-data"), GroupStore.GROUP.getName());
+//                RequestBody members =
+//                        RequestBody.create(
+//                                MediaType.parse("multipart/form-data"), UserStore.USERS);
+
 
                 GroupStore.updateGroup(description, name);
 

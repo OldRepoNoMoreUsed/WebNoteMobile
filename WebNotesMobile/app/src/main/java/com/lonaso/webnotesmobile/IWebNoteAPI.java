@@ -29,7 +29,7 @@ public interface IWebNoteAPI {
     @GET("user/{user}")
     Call<User> getUser(@Path("user") int userID);
 
-    @GET("group/")
+    @GET("group")
     Call<List<Group>> getGroups();
 
     @GET("group/{group}")
@@ -39,7 +39,7 @@ public interface IWebNoteAPI {
     Call<List<User>> getUsersFromGroup(@Path("group") int groupID);
 
     @Multipart
-    @PUT("group/{group}")
+    @POST("group/{group}")
     Call<ResponseBody> uploadGroup(  @Path("group") int groupID,
                                 @Part("name") RequestBody name,
                                 @Part("description") RequestBody description);

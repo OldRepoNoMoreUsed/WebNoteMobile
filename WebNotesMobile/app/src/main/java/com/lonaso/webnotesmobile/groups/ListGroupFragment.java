@@ -72,7 +72,6 @@ public class ListGroupFragment extends Fragment implements MainActivity.OnBackPr
             th.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
-            System.err.println("HELLO");
         }
         groupAdapter = new GroupAdapter(activity);
         groupListView.setAdapter(groupAdapter);
