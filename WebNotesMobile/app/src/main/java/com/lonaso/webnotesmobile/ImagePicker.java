@@ -46,6 +46,7 @@ public class ImagePicker {
         pickIntent.putExtra("return-data", true);
         pickIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(getTempFile(context)));
 
+
         intentList = addIntentsToList(context, intentList, pickIntent);
         intentList = addIntentsToList(context, intentList, takePhotoIntent);
 

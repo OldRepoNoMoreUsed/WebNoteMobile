@@ -73,7 +73,7 @@ public class ListGroupFragment extends Fragment implements MainActivity.OnBackPr
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println(GroupStore.GROUPS.get(0).getName());
+
         groupAdapter = new GroupAdapter(activity);
         groupListView.setAdapter(groupAdapter);
         groupListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

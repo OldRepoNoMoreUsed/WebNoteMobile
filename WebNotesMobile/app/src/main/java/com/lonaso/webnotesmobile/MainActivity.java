@@ -2,6 +2,7 @@ package com.lonaso.webnotesmobile;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -24,6 +25,9 @@ import com.lonaso.webnotesmobile.NotePackage.ListeNote;
 import com.lonaso.webnotesmobile.users.UserAccountFragment;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.Random;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -152,12 +156,33 @@ public class MainActivity extends AppCompatActivity
         super.onDestroy();
     }
 
-    // Colin's blog
-    // https://colinyeoh.wordpress.com/2012/05/18/android-getting-image-uri-from-bitmap/
-    public static Uri getImageUri(Context inContext, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
+    // http://stackoverflow.com/questions/12555420/how-to-get-a-uri-object-from-bitmap
+    public static Uri bitmapToUriConverter(Context context, Bitmap mBitmap) {
+        Uri uri = null;
+        try {
+            final BitmapFactory.Options options = new BitmapFactory.Options();
+            // Calculate inSampleSize
+//            options.inSampleSize = calculateInSampleSize(options, 100, 100);
+
+            // Decode bitmap with inSampleSize set
+            options.inJustDecodeBounds = false;
+            Bitmap newBitmap = Bitmap.createScaledBitmap(mBitmap, 200, 200,
+                    true);
+            File file = new File(context.getFilesDir(), "Image"
+                    + new Random().nextInt() + ".jpeg");
+            FileOutputStream out = context.openFileOutput(file.getName(),
+                    Context.MODE_WORLD_READABLE);
+            newBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.flush();
+            out.close();
+            //get absolute path
+            String realPath = file.getAbsolutePath();
+            File f = new File(realPath);
+            uri = Uri.fromFile(f);
+
+        } catch (Exception e) {
+//            Log.e("Your Error Message", e.getMessage());
+        }
+        return uri;
     }
 }

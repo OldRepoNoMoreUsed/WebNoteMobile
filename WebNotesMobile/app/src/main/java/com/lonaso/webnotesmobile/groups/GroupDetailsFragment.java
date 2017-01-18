@@ -51,6 +51,7 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
     private EditText groupDescriptionEditText;
     private int groupID;
     private Bitmap groupIcon;
+    private String groupIconPath;
     private static final int PICK_IMAGE_ID = 234;
 
 
@@ -106,7 +107,7 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
             th.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
-            System.err.println("HELLO");
+//            System.err.println("HELLO");
         }
 
         new AsyncTask<Void, Void, Void>() {
@@ -190,42 +191,34 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
         saveGroupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Bitmap bitmap = ((BitmapDrawable) groupIconImageView.getDrawable()).getBitmap();
-//                Uri uri = MainActivity.getImageUri(getActivity().getApplicationContext(), bitmap);
-//                File file = new File(uri.toString());
+                // Création d'un objet File depuis l'uri de l'image de l' ImageView
+                Bitmap bitmap = ((BitmapDrawable) groupIconImageView.getDrawable()).getBitmap();
+                Uri uri = MainActivity.bitmapToUriConverter(getActivity(), bitmap);
+                File file = new File(uri.getPath());
 
 
                 GroupStore.GROUP.setName(groupNameEditText.getText().toString());
                 GroupStore.GROUP.setDescription(groupDescriptionEditText.getText().toString());
 
+                // Create RequestBody instance from file
+                RequestBody requestFile =
+                        RequestBody.create(MediaType.parse("multipart/form-data"), file);
 
-                // create RequestBody instance from file
-//                RequestBody requestFile =
-//                        RequestBody.create(MediaType.parse("multipart/form-data"), file);
-//
-//                // MultipartBody.Part is used to send also the actual file name
-//                MultipartBody.Part icon =
-//                        MultipartBody.Part.createFormData("icon", file.getName(), requestFile);
+                // MultipartBody.Part is used to send also the actual file name
+                MultipartBody.Part icon =
+                        MultipartBody.Part.createFormData("icon", file.getName(), requestFile);
 
-                // add another part within the multipart request
+                // Add another part within the multipart request
                 RequestBody description =
                         RequestBody.create(
                                 MediaType.parse("multipart/form-data"), GroupStore.GROUP.getDescription());
                 RequestBody name =
                         RequestBody.create(
                                 MediaType.parse("multipart/form-data"), GroupStore.GROUP.getName());
-//                RequestBody members =
-//                        RequestBody.create(
-//                                MediaType.parse("multipart/form-data"), UserStore.USERS);
 
+                // Update Group
+                GroupStore.updateGroup(name, description, icon, UserStore.USERS);
 
-                GroupStore.updateGroup(description, name);
-
-//                if(file.delete()) {
-//                    System.out.println("--> OK");
-//                } else {
-//                    System.out.println("--> ERROR");
-//                }
             }
         });
     }
