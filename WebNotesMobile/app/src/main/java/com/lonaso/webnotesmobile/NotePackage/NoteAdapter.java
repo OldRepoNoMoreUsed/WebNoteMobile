@@ -62,17 +62,17 @@ public class NoteAdapter extends BaseAdapter implements Filterable{
 
     @Override
     public int getCount() {
-        return 0;
+        return filteredNotes.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return filteredNotes.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     @Override

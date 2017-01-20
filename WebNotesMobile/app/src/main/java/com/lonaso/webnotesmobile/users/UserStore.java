@@ -94,7 +94,7 @@ public class UserStore {
         IWebNoteAPI webNoteAPI = retrofit.create(IWebNoteAPI.class);
         Call<List<User>> call = webNoteAPI.getUsers();
         try {
-            USERS = call.execute().body();
+            System.out.println("--> " + (call.execute().body()).get(0));
         } catch (IOException e) {
             e.printStackTrace();
         }

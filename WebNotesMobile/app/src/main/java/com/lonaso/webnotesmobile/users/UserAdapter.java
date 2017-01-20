@@ -46,6 +46,7 @@ public class UserAdapter extends BaseAdapter implements Filterable {
 
         filteredUsers = UserStore.USERS;
 
+
         userFilter = new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
