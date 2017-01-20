@@ -87,19 +87,18 @@ public class ConnectionFragment extends Fragment{
                     System.err.println("FUCK");
                 }
 
-
                 for (User user: UserStore.USERS) {
-                    if(user.getEmail().equals(userEmail.getText()) && user.getPassword().equals(userPassword.getText())){
-                        UserStore.loadUser(user.getId());
-                        Fragment fragment = new ListGroupFragment();
-                        //replacing the fragment
-                        if (fragment != null) {
-                            FragmentTransaction ft = getFragmentManager().beginTransaction();
-                            ft.replace(R.id.content_frame, fragment);
-                            ft.commit();
-                        }
-//                        System.out.println(user.getEmail());
-                    }
+//                    if(user.getEmail().equals(userEmail.getText().toString()) && BCrypt.checkpw(userPassword.getText().toString(), user.getPassword())){
+//                        UserStore.loadUser(user.getId());
+//                        Fragment fragment = new ListGroupFragment();
+//                        //replacing the fragment
+//                        if (fragment != null) {
+//                            FragmentTransaction ft = getFragmentManager().beginTransaction();
+//                            ft.replace(R.id.content_frame, fragment);
+//                            ft.commit();
+//                        }
+                        System.out.println("---> " + user.getName());
+//                    }
                 }
             }
         });

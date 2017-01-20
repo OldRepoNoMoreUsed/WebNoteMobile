@@ -43,6 +43,7 @@ public class UserAdapter extends BaseAdapter implements Filterable {
     }
 
     private void construct(final int groupID) {
+
         filteredUsers = UserStore.USERS;
 
         userFilter = new Filter() {

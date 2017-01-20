@@ -11,6 +11,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -46,6 +48,7 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
     private SearchView userSearchView;
     private UserAdapter userAdapter;
     private Button saveGroupButton;
+    private Button addUserGroupButton;
     private ImageView groupIconImageView;
     private EditText groupNameEditText;
     private EditText groupDescriptionEditText;
@@ -88,6 +91,7 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
         userListView = (ListView) view.findViewById(R.id.userListView);
         userSearchView = (SearchView) view.findViewById(R.id.userSearch);
         saveGroupButton = (Button) view.findViewById(R.id.saveGroupButton);
+        addUserGroupButton = (Button) view.findViewById(R.id.addUserGroupButton);
         groupIconImageView = (ImageView) view.findViewById(R.id.groupImageView);
         groupNameEditText = (EditText) view.findViewById(R.id.groupNameEditText);
         groupDescriptionEditText = (EditText) view.findViewById(R.id.groupDescriptionEditText);
@@ -107,7 +111,6 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
             th.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
-//            System.err.println("HELLO");
         }
 
         new AsyncTask<Void, Void, Void>() {
@@ -129,6 +132,7 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
             }
 
         }.execute();
+
 
         groupNameEditText.setText(GroupStore.GROUP.getName());
         groupDescriptionEditText.setText(GroupStore.GROUP.getDescription());
@@ -219,6 +223,24 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
                 // Update Group
                 GroupStore.updateGroup(name, description, icon, UserStore.USERS);
 
+            }
+        });
+
+        addUserGroupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GroupAddUsersFragment groupAddUsersFragment = (GroupAddUsersFragment) getFragmentManager().findFragmentById(R.id.groupAddUserFragment);
+                if(groupAddUsersFragment != null && groupAddUsersFragment.isInLayout()) {
+
+                } else {
+                    Fragment fragment = new GroupAddUsersFragment();
+                    if(fragment != null) {
+                        FragmentTransaction ft = getFragmentManager().beginTransaction();
+                        ft.replace(R.id.content_frame, fragment);
+                        ft.addToBackStack(null);
+                        ft.commit();
+                    }
+                }
             }
         });
     }

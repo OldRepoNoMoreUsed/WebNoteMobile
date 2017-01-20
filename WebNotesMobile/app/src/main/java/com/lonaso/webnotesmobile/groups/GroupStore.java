@@ -128,4 +128,31 @@ public class GroupStore {
             }
         });
     }
+
+    public static void addUser(Integer member) {
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                .create();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(IWebNoteAPI.ENDPOINT)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        IWebNoteAPI webNoteAPI = retrofit.create(IWebNoteAPI.class);
+        Call<ResponseBody> call = webNoteAPI.addUserGroup(GROUP.getId(), member);
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+//                Log.v("Upload", "success");
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+//                Log.e("Upload error:", t.getMessage());
+
+            }
+        });
+    }
 }
