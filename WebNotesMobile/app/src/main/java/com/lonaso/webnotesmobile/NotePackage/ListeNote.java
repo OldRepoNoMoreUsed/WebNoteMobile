@@ -69,6 +69,7 @@ public class ListeNote extends Fragment{
             @Override
             public void run(){
                 NoteStore.loadNotes();
+                System.out.println(NoteStore.NOTES);
             }
         };
 

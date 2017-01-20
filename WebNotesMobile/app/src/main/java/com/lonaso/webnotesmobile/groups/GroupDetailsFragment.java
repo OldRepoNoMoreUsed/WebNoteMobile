@@ -91,7 +91,7 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
         userListView = (ListView) view.findViewById(R.id.userListView);
         userSearchView = (SearchView) view.findViewById(R.id.userSearch);
         saveGroupButton = (Button) view.findViewById(R.id.saveGroupButton);
-        addUserGroupButton = (Button) view.findViewById(R.id.addUserGroupButton);
+        //addUserGroupButton = (Button) view.findViewById(R.id.addUserGroupButton);
         groupIconImageView = (ImageView) view.findViewById(R.id.groupImageView);
         groupNameEditText = (EditText) view.findViewById(R.id.groupNameEditText);
         groupDescriptionEditText = (EditText) view.findViewById(R.id.groupDescriptionEditText);
