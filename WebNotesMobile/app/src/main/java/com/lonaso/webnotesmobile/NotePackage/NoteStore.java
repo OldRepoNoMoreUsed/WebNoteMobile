@@ -24,7 +24,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NoteStore {
 
-    private static List<Note> NOTES = new ArrayList<Note>();
+    public static List<Note> NOTES = new ArrayList<Note>();
     private static int userID = 1;
     public static Note NOTE;
 
