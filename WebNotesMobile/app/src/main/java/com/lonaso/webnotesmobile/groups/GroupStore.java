@@ -4,9 +4,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.lonaso.webnotesmobile.IWebNoteAPI;
 import com.lonaso.webnotesmobile.MainActivity;
+import com.lonaso.webnotesmobile.users.User;
 import com.lonaso.webnotesmobile.users.UserAdapter;
 
 import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BrokenBarrierException;
@@ -57,7 +59,7 @@ public class GroupStore {
 
     public static void loadGroups() {
         Gson gson = new GsonBuilder()
-                .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
                 .create();
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -76,7 +78,7 @@ public class GroupStore {
 
     public static void loadGroup(int groupID) {
         Gson gson = new GsonBuilder()
-                .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
                 .create();
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -93,9 +95,16 @@ public class GroupStore {
         }
     }
 
-    public static void updateGroup(RequestBody description, RequestBody name) {
+    public static void updateGroup(RequestBody name, RequestBody description, MultipartBody.Part icon, List<User> members) {
+
+        List<Integer> membersID = new ArrayList<>();
+
+        for(int i = 0 ; i<members.size(); i++) {
+            membersID.add(members.get(i).getId());
+        }
+
         Gson gson = new GsonBuilder()
-                .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
                 .create();
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -104,19 +113,17 @@ public class GroupStore {
                 .build();
 
         IWebNoteAPI webNoteAPI = retrofit.create(IWebNoteAPI.class);
-        Call<ResponseBody> call = webNoteAPI.uploadGroup(GROUP.getId(), name, description);
+        Call<ResponseBody> call = webNoteAPI.uploadGroup(GROUP.getId(), name, description, membersID, icon);
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<ResponseBody> call,
-                                   Response<ResponseBody> response) {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 //                Log.v("Upload", "success");
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
 //                Log.e("Upload error:", t.getMessage());
-                System.err.println(t.getMessage());
 
             }
         });
