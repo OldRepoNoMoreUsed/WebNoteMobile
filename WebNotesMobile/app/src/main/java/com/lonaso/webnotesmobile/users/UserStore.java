@@ -20,11 +20,11 @@ public class UserStore {
     public static List<User> USERS = new ArrayList<>();
     public static User USER;
 
-    static {
-        for(int i = 0; i < 20; i++) {
-            USERS.add(new User(i, "User name " + i, "user" + i + "@example.com", "password" + i, "avatar" + 1 + ".png"));
-        }
-    }
+//    static {
+//        for(int i = 0; i < 20; i++) {
+//            USERS.add(new User(i, "User name " + i, "user" + i + "@example.com", "password" + i, "avatar" + 1 + ".png"));
+//        }
+//    }
 
     public static User findUserById(int id) {
         User result = null;

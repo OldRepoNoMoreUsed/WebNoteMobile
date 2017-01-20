@@ -20,9 +20,8 @@ import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 public interface IWebNoteAPI {
-    String SERVER = "http://157.26.106.134/";
-    //String SERVER = "http://127.0.0.1/";
-    //String SERVER ="http://webnotes/";
+    String SERVER = "http://157.26.109.219/";
+
     String STORAGE = SERVER + "storage/";
     String ENDPOINT = SERVER + "api/";
 
@@ -63,4 +62,9 @@ public interface IWebNoteAPI {
                                 @Part("description") RequestBody description,
                                 @Part("members[]") List<Integer> members,
                                 @Part MultipartBody.Part icon);
+
+    @Multipart
+    @POST("group/{group}/addUser")
+    Call<ResponseBody> addUserGroup( @Path("group") int groupID,
+                                     @Part("member") Integer member);
 }

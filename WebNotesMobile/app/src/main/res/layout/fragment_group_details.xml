@@ -45,7 +45,13 @@
     <ListView
         android:layout_width="match_parent"
         android:id="@+id/userListView"
-        android:layout_height="237dp" />
+        android:layout_height="177dp" />
+
+    <Button
+        android:text="Ajouter des utilisateurs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/addUserGroupButton" />
 
     <Button
         android:text="Enregister"
