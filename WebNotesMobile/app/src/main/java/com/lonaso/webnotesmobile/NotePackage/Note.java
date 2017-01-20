@@ -1,5 +1,7 @@
 package com.lonaso.webnotesmobile.NotePackage;
 
+import android.text.TextUtils;
+
 /**
  * Created by nicolas on 29.11.16.
  */
@@ -11,7 +13,8 @@ public class Note {
     private String content;
     private String description;
 
-    public Note(String title, String description, String content){
+    public Note(int id, String title, String description, String content){
+        this.id = id;
         this.title = title;
         this.description = description;
         this.content = content;
@@ -41,5 +44,16 @@ public class Note {
 
     public void setContent(String content){
         this.content = content;
+    }
+
+    public boolean equals(Object obj){
+        if(this == obj){
+            return true;
+        }
+        if(!(obj instanceof Note)){
+            return false;
+        }
+        Note other = (Note) obj;
+        return TextUtils.equals(getTitle(), other.getTitle());
     }
 }

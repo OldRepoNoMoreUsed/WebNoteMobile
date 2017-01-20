@@ -100,6 +100,6 @@ public class NoteView extends Fragment implements MainActivity.OnBackPressedList
         EditText description = (EditText) getActivity().findViewById(R.id.Description);
         MultiAutoCompleteTextView content = (MultiAutoCompleteTextView) getActivity().findViewById(R.id.Content);
 
-        note = new Note(title.getText().toString(), description.getText().toString(), content.getText().toString());
+        //note = new Note(title.getText().toString(), description.getText().toString(), content.getText().toString());
     }
 }

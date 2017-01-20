@@ -44,7 +44,6 @@ public class ListeNote extends Fragment{
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //you can set the title for your toolbar here for different fragments different titles
         getActivity().setTitle("Liste des notes");
         retrieveViews(getView());
         setUpViews(getActivity());
@@ -72,10 +71,13 @@ public class ListeNote extends Fragment{
                 NoteStore.loadNotes();
             }
         };
+
         thread.start();
+
         try{
             thread.join();
         }catch(InterruptedException e){
+            System.out.println("Erreur thread note");
             e.printStackTrace();
             System.err.println("Interrupted Exception Thread setupViewNote");
         }
@@ -89,6 +91,7 @@ public class ListeNote extends Fragment{
                 bundle.putInt("id" , note.getId());
 
                 NoteView noteView = (NoteView) getFragmentManager().findFragmentById(R.id.content_frame);
+
                 if(noteView != null && noteView.isInLayout()){
                     Toast.makeText(getContext(), "Affichage du contenu d'un élément", Toast.LENGTH_LONG).show();
                 }else{
@@ -97,7 +100,8 @@ public class ListeNote extends Fragment{
                         fragment.setArguments(bundle);
                         FragmentTransaction ft = getFragmentManager().beginTransaction();
                         ft.replace(R.id.content_frame, fragment);
-                        ft.addToBackStack(null).commit();
+                        ft.addToBackStack(null);
+                        ft.commit();
                     }
                 }
             }
@@ -126,5 +130,11 @@ public class ListeNote extends Fragment{
         noteView = new NoteView();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.content_frame, noteView).commit();
+    }
+
+    @Override
+    public void onResume(){
+        noteAdapter.notifyDataSetChanged();
+        super.onResume();
     }
 }
