@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -19,12 +20,6 @@ public class UserStore {
 
     public static List<User> USERS = new ArrayList<>();
     public static User USER;
-
-//    static {
-//        for(int i = 0; i < 20; i++) {
-//            USERS.add(new User(i, "User name " + i, "user" + i + "@example.com", "password" + i, "avatar" + 1 + ".png"));
-//        }
-//    }
 
     public static User findUserById(int id) {
         User result = null;
@@ -62,6 +57,10 @@ public class UserStore {
         return result;
     }
 
+    /**
+     * Load members of a group
+     * @param groupID
+     */
     public static void loadUsersFromGroup(int groupID) {
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
@@ -81,6 +80,9 @@ public class UserStore {
         }
     }
 
+    /**
+     * Load list of users from DB
+     */
     public static void loadUsers() {
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
@@ -94,13 +96,41 @@ public class UserStore {
         IWebNoteAPI webNoteAPI = retrofit.create(IWebNoteAPI.class);
         Call<List<User>> call = webNoteAPI.getUsers();
         try {
-            System.out.println("--> " + (call.execute().body()).get(0));
+            USERS = call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void loadUser(int userID) {
+//    public static void loadUser(int userID) {
+//        Gson gson = new GsonBuilder()
+//                .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+//                .create();
+//
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl(IWebNoteAPI.ENDPOINT)
+//                .addConverterFactory(GsonConverterFactory.create(gson))
+//                .build();
+//
+//        IWebNoteAPI webNoteAPI = retrofit.create(IWebNoteAPI.class);
+//        Call<User> call = webNoteAPI.getUser(userID);
+//        try {
+//            USER = call.execute().body();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
+    public static void removeUser(int position) {
+        USERS.remove(position);
+    }
+
+    /**
+     * Check if user exists in DB
+     * @param email
+     * @param name
+     */
+    public static void authUser(RequestBody email, RequestBody name) {
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
                 .create();
@@ -111,15 +141,11 @@ public class UserStore {
                 .build();
 
         IWebNoteAPI webNoteAPI = retrofit.create(IWebNoteAPI.class);
-        Call<User> call = webNoteAPI.getUser(userID);
+        Call<User> call = webNoteAPI.authUser(email, name);
         try {
             USER = call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static void removeUser(int position) {
-        USERS.remove(position);
     }
 }

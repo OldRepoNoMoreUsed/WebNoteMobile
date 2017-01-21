@@ -16,13 +16,13 @@
         android:src=""
         android:contentDescription="@string/image_content_description" />-->
 
-    <Button
-        android:id="@+id/create_account"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/small_padding"
-        android:text="@string/create_account" />
+    <!--<Button-->
+        <!--android:id="@+id/create_account"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:layout_marginTop="@dimen/small_padding"-->
+        <!--android:text="@string/create_account" />-->
 
     <TextView
         android:layout_width="wrap_content"
@@ -46,15 +46,14 @@
         android:layout_gravity="center_horizontal"
         android:paddingTop="@dimen/normal_padding"
         android:textSize="@dimen/normal_text_size"
-        android:text="@string/password"
+        android:text="@string/name"
         android:textColor="@color/black_color" />
 
     <EditText
-        android:id="@+id/user_password"
+        android:id="@+id/user_name"
         android:layout_width="@dimen/large_padding"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:inputType="textPassword" />
+        android:layout_gravity="center" />
 
     <Button
         android:id="@+id/connect"

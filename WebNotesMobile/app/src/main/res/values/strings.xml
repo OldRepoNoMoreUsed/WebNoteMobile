@@ -11,7 +11,7 @@
     <!--<string name="image_content_description">Logo de l'application</string>-->
     <string name="create_account">Créer un compte</string>
     <string name="email">Adresse email</string>
-    <string name="password">Mot de passe</string>
+    <string name="name">Nom</string>
     <string name="pseudo">Pseudo</string>
     <string name="connect">Se connecter</string>
     <string name="modify">Modifier</string>

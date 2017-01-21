@@ -20,8 +20,6 @@ import com.lonaso.webnotesmobile.users.User;
 import com.lonaso.webnotesmobile.users.UserAdapter;
 import com.lonaso.webnotesmobile.users.UserStore;
 
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
 
 public class GroupAddUsersFragment extends Fragment implements MainActivity.OnBackPressedListener {
 

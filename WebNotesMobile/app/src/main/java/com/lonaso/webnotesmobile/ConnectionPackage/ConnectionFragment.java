@@ -9,24 +9,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 
+import com.lonaso.webnotesmobile.MainActivity;
+import com.lonaso.webnotesmobile.NotePackage.ListeNote;
 import com.lonaso.webnotesmobile.R;
-import com.lonaso.webnotesmobile.groups.ListGroupFragment;
-import com.lonaso.webnotesmobile.users.User;
 import com.lonaso.webnotesmobile.users.UserStore;
 
-/**
- * Created by steve.nadalin on 27/11/2016.
- */
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+
+import static android.support.v4.widget.DrawerLayout.LOCK_MODE_UNLOCKED;
 
 public class ConnectionFragment extends Fragment{
 
     public static final String TAG = "ConnectionFragment";
     //private ImageView appLogo;
-    private Button createAccount;
     private EditText userEmail;
-    private EditText userPassword;
+    private EditText userName;
     private Button connect;
 
     @Override
@@ -50,33 +49,31 @@ public class ConnectionFragment extends Fragment{
     }
 
     private void retrieveViews(View view) {
-        createAccount = (Button) view.findViewById(R.id.create_account);
         userEmail = (EditText) view.findViewById(R.id.user_email);
-        userPassword = (EditText) view.findViewById(R.id.user_password);
+        userName = (EditText) view.findViewById(R.id.user_name);
         connect = (Button) view.findViewById(R.id.connect);
 
     }
 
     private void setUpViews(final Activity activity) {
-        createAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Fragment fragment = new CreateAccountFragment();
-                if (fragment != null) {
-                    FragmentTransaction ft = getFragmentManager().beginTransaction();
-                    ft.replace(R.id.content_frame, fragment);
-                    ft.commit();
-                }
-            }
-        });
 
+        // Connection button click
         connect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                final RequestBody email =
+                        RequestBody.create(
+                                MediaType.parse("multipart/form-data"), userEmail.getText().toString());
+
+                final RequestBody name =
+                        RequestBody.create(
+                                MediaType.parse("multipart/form-data"), userName.getText().toString());
+
+                // API Call
                 Thread thread = new Thread(){
                     @Override
                     public void run(){
-                        UserStore.loadUsers();
+                        UserStore.authUser(email, name);
                     }
                 };
                 thread.start();
@@ -87,18 +84,16 @@ public class ConnectionFragment extends Fragment{
                     System.err.println("FUCK");
                 }
 
-                for (User user: UserStore.USERS) {
-//                    if(user.getEmail().equals(userEmail.getText().toString()) && BCrypt.checkpw(userPassword.getText().toString(), user.getPassword())){
-//                        UserStore.loadUser(user.getId());
-//                        Fragment fragment = new ListGroupFragment();
-//                        //replacing the fragment
-//                        if (fragment != null) {
-//                            FragmentTransaction ft = getFragmentManager().beginTransaction();
-//                            ft.replace(R.id.content_frame, fragment);
-//                            ft.commit();
-//                        }
-                        System.out.println("---> " + user.getName());
-//                    }
+                // User exist
+                if(UserStore.USER.getName() != null) {
+                    Fragment fragment = new ListeNote();
+                    if(fragment != null) {
+                        FragmentTransaction ft = getFragmentManager().beginTransaction();
+                        ft.replace(R.id.content_frame, fragment);
+                        ft.addToBackStack(null);
+                        ft.commit();
+                    }
+                    MainActivity.setDrawerLock(LOCK_MODE_UNLOCKED);
                 }
             }
         });

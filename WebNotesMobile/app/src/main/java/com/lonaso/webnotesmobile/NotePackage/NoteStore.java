@@ -18,10 +18,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-/**
- * Created by nicolas on 29.11.16.
- */
-
 public class NoteStore {
 
     public static List<Note> NOTES = new ArrayList<Note>();
@@ -54,6 +50,21 @@ public class NoteStore {
                 .build();
         IWebNoteAPI webNoteAPI = retrofit.create(IWebNoteAPI.class);
         Call<List<Note>> call = webNoteAPI.getNotes();
+        try{
+            NOTES = call.execute().body();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void loadNotesOfUser(int userID){
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").create();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(IWebNoteAPI.ENDPOINT)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+        IWebNoteAPI webNoteAPI = retrofit.create(IWebNoteAPI.class);
+        Call<List<Note>> call = webNoteAPI.getNotesOfUser(userID);
         try{
             NOTES = call.execute().body();
         }catch(IOException e){

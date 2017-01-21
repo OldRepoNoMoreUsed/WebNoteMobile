@@ -11,7 +11,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -91,7 +90,7 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
         userListView = (ListView) view.findViewById(R.id.userListView);
         userSearchView = (SearchView) view.findViewById(R.id.userSearch);
         saveGroupButton = (Button) view.findViewById(R.id.saveGroupButton);
-        //addUserGroupButton = (Button) view.findViewById(R.id.addUserGroupButton);
+        addUserGroupButton = (Button) view.findViewById(R.id.addUserGroupButton);
         groupIconImageView = (ImageView) view.findViewById(R.id.groupImageView);
         groupNameEditText = (EditText) view.findViewById(R.id.groupNameEditText);
         groupDescriptionEditText = (EditText) view.findViewById(R.id.groupDescriptionEditText);

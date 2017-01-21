@@ -110,6 +110,7 @@ public class UserAdapter extends BaseAdapter implements Filterable {
 
         holder.nameTextView.setText(user.getName());
 
+        // Load image
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {

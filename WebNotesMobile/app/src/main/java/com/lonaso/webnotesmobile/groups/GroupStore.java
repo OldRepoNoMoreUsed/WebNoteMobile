@@ -27,11 +27,6 @@ public class GroupStore {
     public static List<Group> GROUPS = new ArrayList<>();
     public static Group GROUP;
 
-    static {
-//        for(int i = 0; i < 10; i++) {
-//            GROUPS.add(new Group(i, "Group name " + i, "Description " + i, "icon" + 1 + ".png"));
-//        }
-    }
 
     public static Group findGroupById(int id) {
         Group result = null;
@@ -57,7 +52,7 @@ public class GroupStore {
         return result;
     }
 
-    public static void loadGroups() {
+    public static void loadGroupsOfUser(int userID) {
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
                 .create();
@@ -68,7 +63,7 @@ public class GroupStore {
                 .build();
 
         IWebNoteAPI webNoteAPI = retrofit.create(IWebNoteAPI.class);
-        Call<List<Group>> call = webNoteAPI.getGroups();
+        Call<List<Group>> call = webNoteAPI.getGroupsOfUser(userID);
         try {
             GROUPS = call.execute().body();
         } catch (IOException e) {

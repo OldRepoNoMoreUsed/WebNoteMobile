@@ -18,10 +18,7 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.lonaso.webnotesmobile.R;
-
-/**
- * Created by nicolas on 08.11.16.
- */
+import com.lonaso.webnotesmobile.users.UserStore;
 
 public class ListeNote extends Fragment{
     private Button addNewNotebtn;
@@ -68,7 +65,7 @@ public class ListeNote extends Fragment{
         Thread thread = new Thread(){
             @Override
             public void run(){
-                NoteStore.loadNotes();
+                NoteStore.loadNotesOfUser(UserStore.USER.getId());
                 System.out.println(NoteStore.NOTES);
             }
         };

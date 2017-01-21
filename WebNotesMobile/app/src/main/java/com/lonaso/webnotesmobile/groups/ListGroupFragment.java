@@ -47,7 +47,7 @@ public class ListGroupFragment extends Fragment implements MainActivity.OnBackPr
         super.onActivityCreated(savedInstanceState);
 
         ((MainActivity) getActivity()).setOnBackPressedListener(this);
-        getActivity().setTitle("Liste des groupes");
+        getActivity().setTitle("Liste de mes groupes");
         retrieveViews(getView());
         setUpViews(getActivity());
     }
@@ -63,7 +63,7 @@ public class ListGroupFragment extends Fragment implements MainActivity.OnBackPr
         Thread th = new Thread() {
             @Override
             public void run() {
-                GroupStore.loadGroups();
+                GroupStore.loadGroupsOfUser(UserStore.USER.getId());
             }
         };
 
