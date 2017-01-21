@@ -1,9 +1,12 @@
 package com.lonaso.webnotesmobile;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.design.widget.NavigationView;
@@ -14,15 +17,25 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.lonaso.webnotesmobile.ConnectionPackage.ConnectionFragment;
 import com.lonaso.webnotesmobile.NotePackage.NoteStore;
 import com.lonaso.webnotesmobile.groups.ListGroupFragment;
 import com.lonaso.webnotesmobile.NotePackage.ListeNote;
+import com.lonaso.webnotesmobile.users.UserStore;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Random;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -34,7 +47,10 @@ public class MainActivity extends AppCompatActivity
     private Toolbar toolbar;
 
     private static DrawerLayout drawer;
-    private NavigationView navigationView;
+    private static NavigationView navigationView;
+    private static ImageView userAvatar;
+    private static Bitmap avatarBmp;
+    private static final int PICK_IMAGE_ID = 567;
 
     private NoteStore noteStore = new NoteStore();
 
@@ -65,6 +81,15 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
+
+        userAvatar = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.navUserAvatarImageView);
+        userAvatar.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                onPickImage(v);
+                return true;
+            }
+        });
 
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
@@ -161,5 +186,65 @@ public class MainActivity extends AppCompatActivity
 
     public static void setDrawerLock(int lockMode) {
         MainActivity.drawer.setDrawerLockMode(lockMode);
+    }
+
+    public static void setNavHeader(String name, String email, final String avatar)
+    {
+        View header = navigationView.getHeaderView(0);
+        TextView userName = (TextView) header.findViewById(R.id.navUserNameTextView);
+        TextView userEmail = (TextView) header.findViewById(R.id.navUserEmailTextView);
+        userName.setText(UserStore.USER.getName());
+        userEmail.setText(UserStore.USER.getEmail());
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    InputStream in = new URL(avatar).openStream();
+                    avatarBmp = BitmapFactory.decodeStream(in);
+                } catch (Exception e) {
+                    // log error
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                if (avatarBmp != null)
+                    userAvatar.setImageBitmap(avatarBmp);
+            }
+
+        }.execute();
+    }
+
+    public void onPickImage(View view) {
+        Intent chooseImageIntent = ImagePicker.getPickImageIntent(this);
+        startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data != null)
+        {
+            switch(requestCode) {
+                case PICK_IMAGE_ID:
+                    Bitmap photo = (Bitmap) data.getExtras().get("data");
+                    userAvatar.setImageBitmap(photo);
+                    Bitmap bitmap = ((BitmapDrawable) userAvatar.getDrawable()).getBitmap();
+                    Uri uri = MainActivity.bitmapToUriConverter(this, bitmap);
+                    File file = new File(uri.getPath());
+                    // Create RequestBody instance from file
+                    RequestBody requestFile =
+                            RequestBody.create(MediaType.parse("multipart/form-data"), file);
+
+                    // MultipartBody.Part is used to send also the actual file name
+                    MultipartBody.Part avatar =
+                            MultipartBody.Part.createFormData("avatar", file.getName(), requestFile);
+
+                    UserStore.uploadUserAvatar(UserStore.USER.getId(), avatar);
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }

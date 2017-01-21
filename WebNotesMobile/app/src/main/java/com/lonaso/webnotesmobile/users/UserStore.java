@@ -9,12 +9,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Multipart;
 
 public class UserStore {
 
@@ -147,5 +150,32 @@ public class UserStore {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void uploadUserAvatar(int userID, MultipartBody.Part userAvatar) {
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                .create();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(IWebNoteAPI.ENDPOINT)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        IWebNoteAPI webNoteAPI = retrofit.create(IWebNoteAPI.class);
+        Call<ResponseBody> call = webNoteAPI.uploadUserAvatar(userID, userAvatar);
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+//                Log.v("Upload", "success");
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+//                Log.e("Upload error:", t.getMessage());
+
+            }
+        });
     }
 }

@@ -1,6 +1,7 @@
 package com.lonaso.webnotesmobile.ConnectionPackage;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -13,6 +14,7 @@ import android.widget.EditText;
 import com.lonaso.webnotesmobile.MainActivity;
 import com.lonaso.webnotesmobile.NotePackage.ListeNote;
 import com.lonaso.webnotesmobile.R;
+import com.lonaso.webnotesmobile.users.User;
 import com.lonaso.webnotesmobile.users.UserStore;
 
 import okhttp3.MediaType;
@@ -93,6 +95,7 @@ public class ConnectionFragment extends Fragment{
                         ft.addToBackStack(null);
                         ft.commit();
                     }
+                    MainActivity.setNavHeader(UserStore.USER.getName(), UserStore.USER.getEmail(), UserStore.USER.getAvatar());
                     MainActivity.setDrawerLock(LOCK_MODE_UNLOCKED);
                 }
             }
