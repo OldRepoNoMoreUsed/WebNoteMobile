@@ -20,10 +20,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lonaso.webnotesmobile.connection.ConnectionFragment;
-import com.lonaso.webnotesmobile.notes.NoteStore;
 import com.lonaso.webnotesmobile.groups.ListGroupFragment;
 import com.lonaso.webnotesmobile.notes.ListeNoteFragment;
-import com.lonaso.webnotesmobile.groups.UpdateUserFragment;
+import com.lonaso.webnotesmobile.users.UpdateUserFragment;
 import com.lonaso.webnotesmobile.users.UserStore;
 
 import java.io.File;
@@ -46,11 +45,7 @@ public class MainActivity extends AppCompatActivity
     private static ImageView userAvatar;
     private static Bitmap avatarBmp;
 
-    private NoteStore noteStore = new NoteStore();
 
-    public NoteStore getNoteStore(){
-        return noteStore;
-    }
 
     public interface OnBackPressedListener{
         void doBack();

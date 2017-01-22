@@ -1,4 +1,4 @@
-package com.lonaso.webnotesmobile.groups;
+package com.lonaso.webnotesmobile.users;
 
 import android.app.Activity;
 import android.content.DialogInterface;
