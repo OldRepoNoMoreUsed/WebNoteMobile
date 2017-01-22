@@ -33,7 +33,6 @@ public class GroupAdapter extends BaseAdapter implements Filterable {
 
     private Filter groupFilter;
 
-    private Group group;
     private Bitmap groupIcon;
 
     public GroupAdapter(Context context) {
