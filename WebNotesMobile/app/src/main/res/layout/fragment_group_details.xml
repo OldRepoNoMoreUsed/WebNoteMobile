@@ -11,11 +11,11 @@
     android:paddingLeft="10dp">
 
     <ImageView
-        android:layout_width="100dp"
+        android:layout_width="70dp"
         app:srcCompat="@drawable/ic_menu_group"
         android:background="@android:color/darker_gray"
         android:id="@+id/groupImageView"
-        android:layout_height="100dp"
+        android:layout_height="70dp"
         android:layout_gravity="center" />
 
     <EditText
@@ -45,7 +45,7 @@
     <ListView
         android:layout_width="match_parent"
         android:id="@+id/userListView"
-        android:layout_height="177dp" />
+        android:layout_height="157dp" />
 
     <Button
         android:text="Ajouter des utilisateurs"

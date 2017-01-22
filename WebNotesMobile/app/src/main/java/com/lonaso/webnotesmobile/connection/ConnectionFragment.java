@@ -1,7 +1,6 @@
-package com.lonaso.webnotesmobile.ConnectionPackage;
+package com.lonaso.webnotesmobile.connection;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -10,11 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.lonaso.webnotesmobile.MainActivity;
-import com.lonaso.webnotesmobile.NotePackage.ListeNote;
+import com.lonaso.webnotesmobile.notes.ListeNoteFragment;
 import com.lonaso.webnotesmobile.R;
-import com.lonaso.webnotesmobile.users.User;
 import com.lonaso.webnotesmobile.users.UserStore;
 
 import okhttp3.MediaType;
@@ -88,7 +87,7 @@ public class ConnectionFragment extends Fragment{
 
                 // User exist
                 if(UserStore.USER.getName() != null) {
-                    Fragment fragment = new ListeNote();
+                    Fragment fragment = new ListeNoteFragment();
                     if(fragment != null) {
                         FragmentTransaction ft = getFragmentManager().beginTransaction();
                         ft.replace(R.id.content_frame, fragment);
@@ -97,6 +96,8 @@ public class ConnectionFragment extends Fragment{
                     }
                     MainActivity.setNavHeader(UserStore.USER.getName(), UserStore.USER.getEmail(), UserStore.USER.getAvatar());
                     MainActivity.setDrawerLock(LOCK_MODE_UNLOCKED);
+                } else {
+                    Toast.makeText(getContext(), "Connexion échouée", Toast.LENGTH_SHORT).show();
                 }
             }
         });

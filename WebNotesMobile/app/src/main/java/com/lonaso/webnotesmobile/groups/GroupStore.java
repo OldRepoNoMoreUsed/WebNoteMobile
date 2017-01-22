@@ -6,6 +6,7 @@ import com.lonaso.webnotesmobile.IWebNoteAPI;
 import com.lonaso.webnotesmobile.MainActivity;
 import com.lonaso.webnotesmobile.users.User;
 import com.lonaso.webnotesmobile.users.UserAdapter;
+import com.lonaso.webnotesmobile.users.UserStore;
 
 import java.io.IOException;
 import java.io.InterruptedIOException;
@@ -149,5 +150,27 @@ public class GroupStore {
 
             }
         });
+    }
+
+    public static void createGroup(RequestBody name, RequestBody description, User user) {
+        List<Integer> membersID = new ArrayList<>();
+
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                .create();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(IWebNoteAPI.ENDPOINT)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        IWebNoteAPI webNoteAPI = retrofit.create(IWebNoteAPI.class);
+        Call<ResponseBody> call = webNoteAPI.createGroup(name, description, user.getId());
+
+        try {
+            ResponseBody responseBody = call.execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -18,7 +18,7 @@
         android:layout_weight="0.87" />
 
     <Button
-        android:text="Add new note"
+        android:text="Nouvelle note"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/NewNote" />

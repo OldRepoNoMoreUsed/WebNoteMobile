@@ -5,24 +5,8 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
-    tools:context="com.lonaso.webnotesmobile.ConnectionPackage.ConnectionFragment"
+    tools:context="com.lonaso.webnotesmobile.connection.ConnectionFragment"
     android:id="@+id/connectionFragment">
-
-    <!--<ImageView
-        android:id="@+id/app_logo"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/normal_padding"
-        android:src=""
-        android:contentDescription="@string/image_content_description" />-->
-
-    <!--<Button-->
-        <!--android:id="@+id/create_account"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:layout_marginTop="@dimen/small_padding"-->
-        <!--android:text="@string/create_account" />-->
 
     <TextView
         android:layout_width="wrap_content"
@@ -35,7 +19,7 @@
 
     <EditText
         android:id="@+id/user_email"
-        android:layout_width="@dimen/large_padding"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
         android:layout_gravity="center" />
@@ -51,9 +35,10 @@
 
     <EditText
         android:id="@+id/user_name"
-        android:layout_width="@dimen/large_padding"
+        android:inputType="textPersonName"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:layout_width="200dp" />
 
     <Button
         android:id="@+id/connect"

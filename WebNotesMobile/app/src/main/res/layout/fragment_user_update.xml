@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.lonaso.webnotesmobile.users.UpdateUserFragment"
+    android:id="@+id/userUpdateFragment"
+    android:paddingLeft="10dp">
+
+    <ImageView
+        android:layout_width="100dp"
+        app:srcCompat="@drawable/ic_menu_group"
+        android:background="@android:color/darker_gray"
+        android:id="@+id/userImageView"
+        android:layout_gravity="center"
+        android:layout_height="100dp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Nom du groupe"
+        android:ems="10"
+        android:id="@+id/userNameEditText"
+        android:textAppearance="@android:style/TextAppearance.Material.Large.Inverse" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:id="@+id/userEmailEditText"
+        android:text="Email" />
+
+    <Button
+        android:text="Enregister"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/saveUserButton" />
+
+
+</LinearLayout>

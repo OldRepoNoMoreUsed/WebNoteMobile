@@ -152,7 +152,7 @@ public class UserStore {
         }
     }
 
-    public static void uploadUserAvatar(int userID, MultipartBody.Part userAvatar) {
+    public static void updateUser(RequestBody name, RequestBody email, MultipartBody.Part avatar) {
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
                 .create();
@@ -163,7 +163,7 @@ public class UserStore {
                 .build();
 
         IWebNoteAPI webNoteAPI = retrofit.create(IWebNoteAPI.class);
-        Call<ResponseBody> call = webNoteAPI.uploadUserAvatar(userID, userAvatar);
+        Call<ResponseBody> call = webNoteAPI.uploadUser(USER.getId(), name, email, avatar);
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override

@@ -1,6 +1,6 @@
 package com.lonaso.webnotesmobile;
 
-import com.lonaso.webnotesmobile.NotePackage.Note;
+import com.lonaso.webnotesmobile.notes.Note;
 import com.lonaso.webnotesmobile.groups.Group;
 import com.lonaso.webnotesmobile.users.User;
 
@@ -50,10 +50,18 @@ public interface IWebNoteAPI {
 
     @Multipart
     @POST("note/{note}")
-    Call<ResponseBody> uploadNote(@Path("Note") int noteID,
-                                  @Part("title") RequestBody title,
+    Call<ResponseBody> uploadNote(@Path("note") int noteID,
+                                  @Part("content") RequestBody content,
+                                  @Part("member") Integer member,
+                                  @Part("auteur") RequestBody author);
+
+    @Multipart
+    @POST("note")
+    Call<ResponseBody> createNote(@Part("title") RequestBody title,
                                   @Part("description") RequestBody description,
-                                  @Part("content") RequestBody content);
+                                  @Part("content") RequestBody content,
+                                  @Part("member") Integer member,
+                                  @Part("auteur") RequestBody author);
 
     @Multipart
     @POST("group/{group}")
@@ -74,7 +82,15 @@ public interface IWebNoteAPI {
                            @Part("name") RequestBody name);
 
     @Multipart
-    @POST("user/{user}/avatar")
-    Call<ResponseBody> uploadUserAvatar(@Path("user") int userID,
-                                       @Part MultipartBody.Part userAvatar);
+    @POST("group")
+    Call<ResponseBody> createGroup(@Part("name") RequestBody name,
+                                   @Part("description") RequestBody description,
+                                   @Part("member") Integer member);
+
+    @Multipart
+    @POST("user/{user}")
+    Call<ResponseBody> uploadUser(@Path("user") int userID,
+                                   @Part("name") RequestBody name,
+                                   @Part("email") RequestBody email,
+                                   @Part MultipartBody.Part avatar);
 }

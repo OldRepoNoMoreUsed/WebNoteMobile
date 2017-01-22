@@ -128,7 +128,7 @@ public class ListGroupFragment extends Fragment implements MainActivity.OnBackPr
         newGroupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fragment fragment = new GroupDetailsFragment();
+                Fragment fragment = new NewGroupFragment();
                 //replacing the fragment
                 if (fragment != null) {
                     FragmentTransaction ft = getFragmentManager().beginTransaction();

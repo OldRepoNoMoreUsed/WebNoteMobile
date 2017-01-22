@@ -1,10 +1,8 @@
 package com.lonaso.webnotesmobile;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,10 +19,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.lonaso.webnotesmobile.ConnectionPackage.ConnectionFragment;
-import com.lonaso.webnotesmobile.NotePackage.NoteStore;
+import com.lonaso.webnotesmobile.connection.ConnectionFragment;
+import com.lonaso.webnotesmobile.notes.NoteStore;
 import com.lonaso.webnotesmobile.groups.ListGroupFragment;
-import com.lonaso.webnotesmobile.NotePackage.ListeNote;
+import com.lonaso.webnotesmobile.notes.ListeNoteFragment;
+import com.lonaso.webnotesmobile.groups.UpdateUserFragment;
 import com.lonaso.webnotesmobile.users.UserStore;
 
 import java.io.File;
@@ -32,10 +31,6 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Random;
-
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -50,7 +45,6 @@ public class MainActivity extends AppCompatActivity
     private static NavigationView navigationView;
     private static ImageView userAvatar;
     private static Bitmap avatarBmp;
-    private static final int PICK_IMAGE_ID = 567;
 
     private NoteStore noteStore = new NoteStore();
 
@@ -83,13 +77,6 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         userAvatar = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.navUserAvatarImageView);
-        userAvatar.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                onPickImage(v);
-                return true;
-            }
-        });
 
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
@@ -127,10 +114,13 @@ public class MainActivity extends AppCompatActivity
         //initializing the fragment object which is selected
         switch (itemId) {
             case R.id.nav_note:
-                fragment = new ListeNote();
+                fragment = new ListeNoteFragment();
                 break;
             case R.id.nav_groupe:
                 fragment = new ListGroupFragment();
+                break;
+            case R.id.nav_compte:
+                fragment = new UpdateUserFragment();
                 break;
             case R.id.nav_connection:
                 drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
@@ -214,37 +204,5 @@ public class MainActivity extends AppCompatActivity
             }
 
         }.execute();
-    }
-
-    public void onPickImage(View view) {
-        Intent chooseImageIntent = ImagePicker.getPickImageIntent(this);
-        startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data != null)
-        {
-            switch(requestCode) {
-                case PICK_IMAGE_ID:
-                    Bitmap photo = (Bitmap) data.getExtras().get("data");
-                    userAvatar.setImageBitmap(photo);
-                    Bitmap bitmap = ((BitmapDrawable) userAvatar.getDrawable()).getBitmap();
-                    Uri uri = MainActivity.bitmapToUriConverter(this, bitmap);
-                    File file = new File(uri.getPath());
-                    // Create RequestBody instance from file
-                    RequestBody requestFile =
-                            RequestBody.create(MediaType.parse("multipart/form-data"), file);
-
-                    // MultipartBody.Part is used to send also the actual file name
-                    MultipartBody.Part avatar =
-                            MultipartBody.Part.createFormData("avatar", file.getName(), requestFile);
-
-                    UserStore.uploadUserAvatar(UserStore.USER.getId(), avatar);
-                    break;
-                default:
-                    break;
-            }
-        }
     }
 }

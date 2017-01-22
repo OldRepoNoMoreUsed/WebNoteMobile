@@ -53,7 +53,6 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
     private EditText groupDescriptionEditText;
     private int groupID;
     private Bitmap groupIcon;
-    private String groupIconPath;
     private static final int PICK_IMAGE_ID = 234;
 
 
@@ -221,6 +220,8 @@ public class GroupDetailsFragment extends Fragment implements MainActivity.OnBac
 
                 // Update Group
                 GroupStore.updateGroup(name, description, icon, UserStore.USERS);
+
+                Toast.makeText(getContext(), "Enregistré...", Toast.LENGTH_SHORT).show();
 
             }
         });

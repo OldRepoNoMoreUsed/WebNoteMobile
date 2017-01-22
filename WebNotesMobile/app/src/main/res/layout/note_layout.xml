@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="1">
+    android:weightSum="1"
+    tools:context="com.lonaso.webnotesmobile.notes.NoteViewFragment"
+    android:id="@+id/noteViewFragment">
 
     <EditText
         android:layout_width="match_parent"
@@ -10,26 +14,28 @@
         android:inputType="textPersonName"
         android:text="Title"
         android:ems="10"
-        android:id="@+id/Title" />
+        android:id="@+id/noteTitleEditText" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textMultiLine"
         android:ems="10"
-        android:id="@+id/Description"
+        android:id="@+id/noteDescriptionEditText"
         android:text="Description" />
 
-    <MultiAutoCompleteTextView
-        android:text="Corps de la note "
+    <EditText
         android:layout_width="match_parent"
         android:layout_height="344dp"
-        android:id="@+id/Content" />
+        android:inputType="textMultiLine"
+        android:ems="10"
+        android:gravity="top"
+        android:id="@+id/noteContentEditText" />
 
     <Button
         android:text="Enregistrer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/Save" />
+        android:id="@+id/saveNoteBtn" />
 
 </LinearLayout>

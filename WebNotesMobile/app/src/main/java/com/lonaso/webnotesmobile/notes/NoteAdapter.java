@@ -1,4 +1,4 @@
-package com.lonaso.webnotesmobile.NotePackage;
+package com.lonaso.webnotesmobile.notes;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,15 +9,10 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
-import com.lonaso.webnotesmobile.NotePackage.NoteStore;
 import com.lonaso.webnotesmobile.R;
 
 import java.util.ArrayList;
 import java.util.List;
-
-/**
- * Created by nicolas on 29.11.16.
- */
 
 public class NoteAdapter extends BaseAdapter implements Filterable{
 

@@ -1,10 +1,6 @@
-package com.lonaso.webnotesmobile.NotePackage;
+package com.lonaso.webnotesmobile.notes;
 
 import android.text.TextUtils;
-
-/**
- * Created by nicolas on 29.11.16.
- */
 
 public class Note {
 

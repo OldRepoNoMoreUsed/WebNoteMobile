@@ -1,15 +1,17 @@
-package com.lonaso.webnotesmobile.NotePackage;
+package com.lonaso.webnotesmobile.notes;
 
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.lonaso.webnotesmobile.IWebNoteAPI;
+import com.lonaso.webnotesmobile.users.UserStore;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -20,13 +22,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NoteStore {
 
-    public static List<Note> NOTES = new ArrayList<Note>();
-    private static int userID = 1;
+    public static List<Note> NOTES = new ArrayList<>();
     public static Note NOTE;
-
-    public void addNote(Note note){
-        NOTES.add(note);
-    }
 
     public static Note findNoteByTitle(String title){
         Note res = null;
@@ -38,20 +35,17 @@ public class NoteStore {
         }
         return res;
     }
-    public List<Note> getList(){
-        return NOTES;
-    }
 
-    public static void loadNotes(){
+    public static void loadNote(int noteID){
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").create();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(IWebNoteAPI.ENDPOINT)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         IWebNoteAPI webNoteAPI = retrofit.create(IWebNoteAPI.class);
-        Call<List<Note>> call = webNoteAPI.getNotes();
+        Call<Note> call = webNoteAPI.getNote(noteID);
         try{
-            NOTES = call.execute().body();
+            NOTE = call.execute().body();
         }catch(IOException e){
             e.printStackTrace();
         }
@@ -72,14 +66,41 @@ public class NoteStore {
         }
     }
 
-    public static void updateNote(RequestBody title, RequestBody description, RequestBody content){
+    public static void updateNote(RequestBody content){
+        RequestBody author =
+                RequestBody.create(
+                        MediaType.parse("multipart/form-data"), UserStore.USER.getName());
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(IWebNoteAPI.ENDPOINT)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         IWebNoteAPI webNoteAPI = retrofit.create(IWebNoteAPI.class);
-        Call<ResponseBody> call = webNoteAPI.uploadNote(NOTE.getId(), title, description, content);
+        Call<ResponseBody> call = webNoteAPI.uploadNote(NOTE.getId(), content, UserStore.USER.getId(), author);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Log.v("Upload", "Success");
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e("Upload failed:", t.getMessage());
+            }
+        });
+    }
+
+    public static void createNote(RequestBody title, RequestBody description, RequestBody content) {
+        RequestBody author =
+                RequestBody.create(
+                        MediaType.parse("multipart/form-data"), UserStore.USER.getName());
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(IWebNoteAPI.ENDPOINT)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+        IWebNoteAPI webNoteAPI = retrofit.create(IWebNoteAPI.class);
+        Call<ResponseBody> call = webNoteAPI.createNote(title, description, content, UserStore.USER.getId(), author);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
