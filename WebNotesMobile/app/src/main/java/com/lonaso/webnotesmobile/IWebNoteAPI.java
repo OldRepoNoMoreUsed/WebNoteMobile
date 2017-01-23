@@ -20,9 +20,9 @@ import retrofit2.http.Path;
  * Interface with requests to API
  */
 public interface IWebNoteAPI {
-    String SERVER = "http://192.168.1.115/";    // Server Address or IP
-    String STORAGE = SERVER + "storage/";       // Storage URL (for images)
-    String ENDPOINT = SERVER + "api/";          // API URL
+    String SERVER = "http://157.26.109.219/";       // Server Address or IP
+    String STORAGE = SERVER + "storage/";           // Storage URL (for images)
+    String ENDPOINT = SERVER + "api/";              // API URL
 
     @GET("user/")
     Call<List<User>> getUsers();

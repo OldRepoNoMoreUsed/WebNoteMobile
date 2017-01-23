@@ -4,6 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:screenOrientation="portrait"
     android:weightSum="1"
     tools:context="com.lonaso.webnotesmobile.notes.NoteViewFragment"
     android:id="@+id/noteViewFragment">

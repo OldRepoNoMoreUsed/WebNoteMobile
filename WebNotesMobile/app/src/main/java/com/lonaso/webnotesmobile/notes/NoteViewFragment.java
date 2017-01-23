@@ -2,10 +2,15 @@ package com.lonaso.webnotesmobile.notes;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +18,7 @@ import android.view.ViewGroup;
 
 import com.lonaso.webnotesmobile.MainActivity;
 import com.lonaso.webnotesmobile.R;
+import com.lonaso.webnotesmobile.users.UserStore;
 
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,7 +27,11 @@ import android.widget.Toast;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
-public class NoteViewFragment extends Fragment implements MainActivity.OnBackPressedListener{
+import android.hardware.SensorEventListener;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+
+public class NoteViewFragment extends Fragment implements MainActivity.OnBackPressedListener, SensorEventListener{
 
 
     public static final String TAG = "NoteViewFragment";
@@ -30,6 +40,14 @@ public class NoteViewFragment extends Fragment implements MainActivity.OnBackPre
     private EditText noteContentEditText;
     private Button saveNoteBtn;
     private int noteID;
+
+    private SensorManager senSensorManager;
+    private Sensor senAccelerometer;
+    private long lastUpdate = 0;
+    private float last_x, last_y, last_z;
+    private static final int SHAKE_THRESHOLD = 800;
+
+    private static int currentNoteOfList = 0;
 
 
     @Override
@@ -54,6 +72,12 @@ public class NoteViewFragment extends Fragment implements MainActivity.OnBackPre
         }
 
         ((MainActivity)getActivity()).setOnBackPressedListener(this);
+
+        senSensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
+        senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        senSensorManager.registerListener(this, senAccelerometer , SensorManager.SENSOR_DELAY_NORMAL);
+
+
         retrieveViews(getView());
         setUpViews(getActivity());
     }
@@ -135,7 +159,77 @@ public class NoteViewFragment extends Fragment implements MainActivity.OnBackPre
 
     @Override
     public void onDestroy(){
-        Toast.makeText(getContext(), "Destroy", Toast.LENGTH_LONG).show();
+//        Toast.makeText(getContext(), "Destroy", Toast.LENGTH_LONG).show();
         super.onDestroy();
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        Sensor mySensor = sensorEvent.sensor;
+
+        if (mySensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            float x = sensorEvent.values[0];
+            float y = sensorEvent.values[1];
+            float z = sensorEvent.values[2];
+
+            long curTime = System.currentTimeMillis();
+
+            if ((curTime - lastUpdate) > 150) {
+                long diffTime = (curTime - lastUpdate);
+                lastUpdate = curTime;
+
+                float speed = Math.abs(x + y + z - last_x - last_y - last_z)/ diffTime * 10000;
+
+                if (speed > SHAKE_THRESHOLD) {
+                    loadNewNote();
+                }
+
+                last_x = x;
+                last_y = y;
+                last_z = z;
+            }
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        senSensorManager.unregisterListener(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    private void loadNewNote() {
+
+        currentNoteOfList = (currentNoteOfList + 1) % NoteStore.NOTES.size();
+
+        Note nextNote = NoteStore.NOTES.get(currentNoteOfList);
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("id" , nextNote.getId());
+
+        NoteViewFragment noteViewFragment = (NoteViewFragment) getFragmentManager().findFragmentById(R.id.noteViewFragment);
+
+        if(noteViewFragment != null && noteViewFragment.isInLayout()){
+//                    Toast.makeText(getContext(), "Affichage du contenu d'un élément", Toast.LENGTH_LONG).show();
+        }else{
+            Fragment fragment = new NoteViewFragment();
+            if(fragment != null){
+                fragment.setArguments(bundle);
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.content_frame, fragment);
+//                ft.addToBackStack(null);
+                ft.commit();
+            }
+        }
     }
 }
