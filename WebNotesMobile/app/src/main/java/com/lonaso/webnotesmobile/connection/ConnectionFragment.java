@@ -86,7 +86,7 @@ public class ConnectionFragment extends Fragment{
                 }
 
                 // User exist
-                if(UserStore.USER.getName() != null) {
+                if(UserStore.USER != null) {
                     Fragment fragment = new ListeNoteFragment();
                     if(fragment != null) {
                         FragmentTransaction ft = getFragmentManager().beginTransaction();

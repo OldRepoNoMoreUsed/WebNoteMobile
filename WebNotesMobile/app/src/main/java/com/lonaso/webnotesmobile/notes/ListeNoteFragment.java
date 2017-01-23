@@ -16,11 +16,12 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.lonaso.webnotesmobile.MainActivity;
 import com.lonaso.webnotesmobile.R;
 import com.lonaso.webnotesmobile.groups.NewGroupFragment;
 import com.lonaso.webnotesmobile.users.UserStore;
 
-public class ListeNoteFragment extends Fragment{
+public class ListeNoteFragment extends Fragment implements MainActivity.OnBackPressedListener{
     private Button addNewNotebtn;
     private ListView noteListView;
     private SearchView noteSearchView;
@@ -134,5 +135,10 @@ public class ListeNoteFragment extends Fragment{
     public void onResume(){
         noteAdapter.notifyDataSetChanged();
         super.onResume();
+    }
+
+    @Override
+    public void doBack() {
+        super.onDestroy();
     }
 }

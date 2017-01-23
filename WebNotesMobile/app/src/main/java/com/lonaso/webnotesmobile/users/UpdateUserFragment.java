@@ -130,19 +130,31 @@ public class UpdateUserFragment extends Fragment implements MainActivity.OnBackP
                         RequestBody.create(MediaType.parse("multipart/form-data"), file);
 
                 // MultipartBody.Part is used to send also the actual file name
-                MultipartBody.Part avatar =
+                final MultipartBody.Part avatar =
                         MultipartBody.Part.createFormData("avatar", file.getName(), requestFile);
 
                 // Add another part within the multipart request
-                RequestBody email =
+                final RequestBody email =
                         RequestBody.create(
                                 MediaType.parse("multipart/form-data"), UserStore.USER.getEmail());
-                RequestBody name =
+                final RequestBody name =
                         RequestBody.create(
                                 MediaType.parse("multipart/form-data"), UserStore.USER.getName());
 
                 // Update Group
-                UserStore.updateUser(name, email, avatar);
+                Thread thread = new Thread() {
+                    @Override
+                    public void run() {
+                        UserStore.updateUser(name, email, avatar);
+                    }
+                };
+
+                thread.start();
+                try {
+                    thread.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
                 Toast.makeText(getContext(), "Enregistré...", Toast.LENGTH_SHORT).show();
 

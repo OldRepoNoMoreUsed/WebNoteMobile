@@ -45,7 +45,7 @@ public class NoteViewFragment extends Fragment implements MainActivity.OnBackPre
     private Sensor senAccelerometer;
     private long lastUpdate = 0;
     private float last_x, last_y, last_z;
-    private static final int SHAKE_THRESHOLD = 800;
+    private static final int SHAKE_THRESHOLD = 400;
 
     private static int currentNoteOfList = 0;
 
@@ -90,7 +90,6 @@ public class NoteViewFragment extends Fragment implements MainActivity.OnBackPre
     }
 
     private void setUpViews(final Activity activity) {
-        System.out.println("Line 69 : " + noteID);
         if(noteID != 0) {
             Thread thread = new Thread() {
                 @Override
@@ -143,8 +142,14 @@ public class NoteViewFragment extends Fragment implements MainActivity.OnBackPre
                 .setMessage("Etes vous sur de ne pas vouloir sauvegarder ?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        // continue with delete
-                        onDestroy();
+                        getFragmentManager().popBackStack();
+                        Fragment fragment = new ListeNoteFragment();
+                        if(fragment != null){
+                            FragmentTransaction ft = getFragmentManager().beginTransaction();
+                            ft.replace(R.id.content_frame, fragment);
+                            ft.addToBackStack(null);
+                            ft.commit();
+                        }
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -174,7 +179,7 @@ public class NoteViewFragment extends Fragment implements MainActivity.OnBackPre
 
             long curTime = System.currentTimeMillis();
 
-            if ((curTime - lastUpdate) > 150) {
+            if ((curTime - lastUpdate) > 200) {
                 long diffTime = (curTime - lastUpdate);
                 lastUpdate = curTime;
 
@@ -227,7 +232,7 @@ public class NoteViewFragment extends Fragment implements MainActivity.OnBackPre
                 fragment.setArguments(bundle);
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.replace(R.id.content_frame, fragment);
-//                ft.addToBackStack(null);
+                ft.addToBackStack(null);
                 ft.commit();
             }
         }

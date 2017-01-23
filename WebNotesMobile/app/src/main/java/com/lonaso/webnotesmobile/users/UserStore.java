@@ -163,19 +163,12 @@ public class UserStore {
                 .build();
 
         IWebNoteAPI webNoteAPI = retrofit.create(IWebNoteAPI.class);
-        Call<ResponseBody> call = webNoteAPI.uploadUser(USER.getId(), name, email, avatar);
+        Call<User> call = webNoteAPI.uploadUser(USER.getId(), name, email, avatar);
 
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-//                Log.v("Upload", "success");
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-//                Log.e("Upload error:", t.getMessage());
-
-            }
-        });
+        try {
+            USER = call.execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

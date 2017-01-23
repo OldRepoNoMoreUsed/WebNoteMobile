@@ -89,7 +89,7 @@ public interface IWebNoteAPI {
 
     @Multipart
     @POST("user/{user}")
-    Call<ResponseBody> uploadUser(@Path("user") int userID,
+    Call<User> uploadUser(@Path("user") int userID,
                                    @Part("name") RequestBody name,
                                    @Part("email") RequestBody email,
                                    @Part MultipartBody.Part avatar);
