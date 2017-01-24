@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.lonaso.webnotesmobile.ImagePicker;
 import com.lonaso.webnotesmobile.MainActivity;
 import com.lonaso.webnotesmobile.R;
+import com.lonaso.webnotesmobile.notes.ListeNoteFragment;
 import com.lonaso.webnotesmobile.users.UserAdapter;
 import com.lonaso.webnotesmobile.users.UserStore;
 
@@ -196,6 +197,13 @@ public class UpdateUserFragment extends Fragment implements MainActivity.OnBackP
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         getFragmentManager().popBackStack();
+                        Fragment fragment = new ListeNoteFragment();
+                        if(fragment != null){
+                            FragmentTransaction ft = getFragmentManager().beginTransaction();
+                            ft.replace(R.id.content_frame, fragment);
+                            ft.addToBackStack(null);
+                            ft.commit();
+                        }
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
